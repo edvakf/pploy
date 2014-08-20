@@ -4,6 +4,10 @@ import org.joda.time.DateTime
 import play.api.Play.current
 
 case class Project(name: String) {
+  if (!Project.allNames.contains(name)) {
+    throw new IllegalArgumentException("bad project name")
+  }
+
   lazy val gainMinutes = current.configuration.getInt("pploy.lock.gainMinutes").get
   lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
 
@@ -55,8 +59,7 @@ object Project {
   def apply(name: Option[String]): Project = {
     name match {
       case None => Project(Project.allNames.head)
-      case Some(x) if Project.allNames.contains(x) => Project(x)
-      case _ => throw new IllegalArgumentException("bad project name")
+      case Some(x) => Project(x)
     }
   }
 }
