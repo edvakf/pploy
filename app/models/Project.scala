@@ -15,8 +15,7 @@ case class Project(name: String) {
   def isLocked = lock_.isDefined
 
   // This method must be called after `isLocked`.
-  // Plus, it's not updated during gainLock, extendLock or releaseLock, so
-  // can't be trusted
+  // Plus, it's not updated during gainLock, extendLock or releaseLock
   def lock = lock_.get
 
   def gainLock(user: User): Boolean = {
