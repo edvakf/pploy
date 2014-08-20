@@ -8,9 +8,6 @@ case class Project(name: String) {
     throw new IllegalArgumentException("bad project name")
   }
 
-  lazy val gainMinutes = current.configuration.getInt("pploy.lock.gainMinutes").get
-  lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
-
   private lazy val lock_ = Lock.fetch(this)
   def isLocked = lock_.isDefined
 
@@ -23,7 +20,7 @@ case class Project(name: String) {
       case Some(_) =>
         false
       case None =>
-        Lock.save(this, user, new DateTime().plusMinutes(gainMinutes))
+        Lock.save(this, user, new DateTime().plusMinutes(Project.gainMinutes))
         true
     }
   }
@@ -31,7 +28,7 @@ case class Project(name: String) {
   def extendLock(user: User): Boolean = {
     lock_ match {
       case Some(lock) if lock.user == user =>
-        Lock.save(this, user, lock.endTime.plusMinutes(extendMinutes))
+        Lock.save(this, user, lock.endTime.plusMinutes(Project.extendMinutes))
         true
       case Some(_) | None =>
         false
@@ -61,4 +58,7 @@ object Project {
       case Some(x) => Project(x)
     }
   }
+
+  lazy val gainMinutes = current.configuration.getInt("pploy.lock.gainMinutes").get
+  lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
 }
