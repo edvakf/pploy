@@ -9,7 +9,7 @@
   <ul class="nav nav-pills nav-stacked">
     @Project.allNames.map { name =>
       <li class="@if(name == currentProject.name) {active}" >
-        <a href="#">@name</a>
+        <a href="/@name">@name</a>
       </li>
     }
   </ul>
