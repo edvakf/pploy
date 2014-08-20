@@ -1,0 +1,7 @@
+sidebar.header.projects=プロジェクト
+sidebar.user.noselect=選択してください
+sidebar.lock.user={0}さんがデプロイ中です
+sidebar.lock.myself=デプロイ中です
+sidebar.lock.extend={0}分延長する
+sidebar.lock.release=デプロイを終了する
+sidebar.lock.gain=デプロイを開始する

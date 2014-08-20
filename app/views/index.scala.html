@@ -1,7 +1,8 @@
-@(message: String)
+@import models.Project
+@import models.User
 
-@main("Welcome to Play") {
+@(currentProject: Project, currentUser: Option[User])(implicit lang: Lang)
 
-    @play20.welcome(message)
-
+@main(currentProject, currentUser) {
+  @lang.code
 }

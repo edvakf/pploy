@@ -1,0 +1,7 @@
+sidebar.header.projects=Projects
+sidebar.user.noselect=Please Select
+sidebar.lock.user={0} is deploying
+sidebar.lock.myself=Deploying
+sidebar.lock.extend=Extend {0} minutes
+sidebar.lock.release=Finish deploying
+sidebar.lock.gain=Start deploying
