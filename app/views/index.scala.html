@@ -3,7 +3,7 @@
 
 @(currentProject: Project, currentUser: Option[User])(implicit lang: Lang)
 
-@main{
+@layout{
   @lang.code
 }{
   @sidebar(currentProject, currentUser)
