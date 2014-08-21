@@ -1,7 +1,4 @@
-@import models.Project
-@import models.User
-
-@(currentProject: Project, currentUser: Option[User])(content: Html)(implicit lang: Lang)
+@(mainContent: Html)(sidebarContent: Html)(implicit lang: Lang)
 
 <!DOCTYPE html>
 
@@ -27,10 +24,10 @@
     <div class="container">
       <div class="row">
         <div class="col-md-9">
-          @content
+          @mainContent
         </div>
         <aside class="col-md-3">
-          @sidebar(currentProject, currentUser)
+          @sidebarContent
         </aside>
       </div>
     </div>
