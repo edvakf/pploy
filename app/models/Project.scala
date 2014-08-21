@@ -8,7 +8,12 @@ case class Project(name: String) {
     throw new IllegalArgumentException("bad project name")
   }
 
-  private lazy val lock_ = Lock.fetch(this)
+  private lazy val lock_ = Lock.fetch(this) match {
+    case Some(l) if l.secondsLeft <= 0 =>
+      l.delete()
+      None
+    case other => identity(other)
+  }
   def isLocked = lock_.isDefined
 
   // This method must be called after `isLocked`.
