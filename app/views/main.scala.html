@@ -1,0 +1,17 @@
+@import models.Project
+@import models.User
+
+@(currentProject: Project, currentUser: Option[User])(implicit lang: Lang)
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h2 class="panel-title">@currentProject.name</h2>
+  </div>
+  <div class="panel-body">
+    <h3>@Messages("main.recent_commits")</h3>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe class="log-frame embed-responsive-item" src="about:blank"></iframe>
+    </div>
+  </div>
+</div>
+

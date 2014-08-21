@@ -6,3 +6,6 @@
 .box {
     background-color: #eee;
 }
+.log-frame {
+    border: solid black 2px !important;
+}
