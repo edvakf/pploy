@@ -14,8 +14,8 @@ object Application extends Controller {
   }
   def getSinglePostParam(request: Request[AnyContent], param: String) = {
     request.body.asFormUrlEncoded
-      .map{_.get(param)}.flatten
-      .map{_.headOption}.flatten
+      .flatMap { _.get(param) }
+      .flatMap { _.headOption }
   }
 
   def index(project: String) = Action { request =>
