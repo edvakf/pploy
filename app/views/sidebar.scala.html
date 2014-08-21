@@ -20,8 +20,8 @@
     @if(Some(currentProject.lock.user) == currentUser) {
       @Messages("sidebar.lock.myself")
       <p class="time-left" data-seconds="@currentProject.lock.secondsLeft">@currentProject.lock.minutesAndSecondsLeft</p>
-      <button class="btn btn-warning" name="operation" value="extend">@Messages("sidebar.lock.extend", 10)</button>
-      <button class="btn btn-success" name="operation" value="release">@Messages("sidebar.lock.release")</button>
+      <button class="btn btn-warning btn-block" name="operation" value="extend">@Messages("sidebar.lock.extend", 10)</button>
+      <button class="btn btn-success btn-block" name="operation" value="release">@Messages("sidebar.lock.release")</button>
       <input type="hidden" name="user" value="@currentProject.lock.user.name">
     } else {
       @Messages("sidebar.lock.user", currentProject.lock.user.name)
@@ -36,6 +36,6 @@
         </option>
       }
     </select>
-    <button class="btn btn-success" name="operation" value="gain">@Messages("sidebar.lock.gain")</button>
+    <button class="btn btn-success btn-block" name="operation" value="gain">@Messages("sidebar.lock.gain")</button>
   }
 </form>
