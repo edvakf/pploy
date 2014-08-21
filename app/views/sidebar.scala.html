@@ -15,22 +15,23 @@
   </ul>
 </div>
 
-<form class="sidebar-section box" action="/@currentProject.name/lock">
+<form class="sidebar-section box" action="/@currentProject.name/lock" method="POST">
   @if(currentProject.isLocked) {
     @if(Some(currentProject.lock.user) == currentUser) {
-      @Messages("sidebar.lock.user", currentProject.lock.user.name)
-      <p class="time-left">00:00</p>
-    } else {
       @Messages("sidebar.lock.myself")
       <p class="time-left">00:00</p>
       <button class="btn btn-warning" name="operation" value="extend">@Messages("sidebar.lock.extend", 10)</button>
       <button class="btn btn-success" name="operation" value="release">@Messages("sidebar.lock.release")</button>
+      <input type="hidden" name="user" value="@currentProject.lock.user.name">
+    } else {
+      @Messages("sidebar.lock.user", currentProject.lock.user.name)
+      <p class="time-left">00:00</p>
     }
   } else {
-    <select class="form-control">
-      <option name="user" value="">[@Messages("sidebar.user.noselect")]</option>
+    <select class="form-control" name="user">
+      <option value="">[@Messages("sidebar.user.noselect")]</option>
       @User.allNames.map { name =>
-        <option name="user" value="@name" @if(Some(User(name)) == currentUser) { selected }>
+        <option value="@name" @if(Some(User(name)) == currentUser) { selected }>
           @name
         </option>
       }
