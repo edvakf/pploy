@@ -20,6 +20,13 @@ case class Project(name: String) {
   // Plus, it's not updated during gainLock, extendLock or releaseLock
   def lock = lock_.get
 
+  def isLockedBy(user: User): Boolean = {
+    isLocked && lock.user == user
+  }
+  def isLockedBy(user: Option[User]): Boolean = {
+    user.isDefined && isLockedBy(user.get)
+  }
+
   def gainLock(user: User): Boolean = {
     lock_ match {
       case Some(_) =>

@@ -17,7 +17,7 @@
 
 <form class="sidebar-section box" action="/@currentProject.name/lock" method="POST">
   @if(currentProject.isLocked) {
-    @if(Some(currentProject.lock.user) == currentUser) {
+    @if(currentProject.isLockedBy(currentUser)) {
       @Messages("sidebar.lock.myself")
       <p class="time-left" data-seconds="@currentProject.lock.secondsLeft">@currentProject.lock.minutesAndSecondsLeft</p>
       <button class="btn btn-success btn-block" name="operation" value="release">@Messages("sidebar.lock.release")</button>
