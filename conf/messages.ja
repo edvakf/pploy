@@ -1,4 +1,7 @@
 main.recent_commits=最近のコミット
+main.checkout=チェックアウト
+main.deploy.production=本番にデプロイ
+main.deploy.staging=ステージングにデプロイ
 sidebar.header.projects=プロジェクト
 sidebar.user.noselect=選択してください
 sidebar.lock.user={0}さんがデプロイ中です

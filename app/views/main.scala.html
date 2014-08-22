@@ -7,6 +7,25 @@
   <div class="panel-heading">
     <h2 class="panel-title">@currentProject.name</h2>
   </div>
+
+  @if(currentProject.isLockedBy(currentUser)) {
+    <div class="well">
+      <h4>@Messages("main.checkout")</h4>
+      <form action="/@currentProject.name/checkout" method="post" class="form-inline">
+        <input type="text" class="form-control" name="commit" value="origin/master">
+        <button class="btn btn-success" type="button">@Messages("main.checkout")</button>
+      </form>
+      <h4>@Messages("main.deploy.staging")</h4>
+      <form action="/@currentProject.name/deploy" method="post">
+        <button class="btn btn-success" type="button" name="target" value="staging">@Messages("main.deploy.staging")</button>
+      </form>
+      <h4>@Messages("main.deploy.production")</h4>
+      <form action="/@currentProject.name/deploy" method="post">
+        <button class="btn btn-success" type="button" name="target" value="production">@Messages("main.deploy.production")</button>
+      </form>
+    </div>
+  }
+
   <div class="panel-body">
     <h3>@Messages("main.recent_commits")</h3>
     <div class="embed-responsive embed-responsive-16by9">
