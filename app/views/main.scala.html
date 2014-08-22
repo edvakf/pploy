@@ -3,7 +3,7 @@
 
 @(currentProject: Project, currentUser: Option[User])(implicit lang: Lang)
 
-<div class="panel panel-primary">
+<div class="panel @if(currentProject.isLockedBy(currentUser)) {panel-danger}else{panel-primary}">
   <div class="panel-heading">
     <h2 class="panel-title">@currentProject.name</h2>
   </div>
