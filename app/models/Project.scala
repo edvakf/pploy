@@ -59,10 +59,7 @@ case class Project(name: String) {
 }
 
 object Project {
-  val allNames = current.configuration
-    .getStringSeq("pploy.projects")
-    .get
-    .asInstanceOf[Seq[String]] // IntelliJ thinks getStringSeq returns Option[Seq[Any]]
+  def allNames = WorkingDir.projects.toSeq
 
   lazy val gainMinutes = current.configuration.getInt("pploy.lock.gainMinutes").get
   lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
