@@ -64,13 +64,6 @@ object Project {
     .get
     .asInstanceOf[Seq[String]] // IntelliJ thinks getStringSeq returns Option[Seq[Any]]
 
-  def apply(name: Option[String]): Project = {
-    name match {
-      case None => Project(Project.allNames.head)
-      case Some(x) => Project(x)
-    }
-  }
-
   lazy val gainMinutes = current.configuration.getInt("pploy.lock.gainMinutes").get
   lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
 }

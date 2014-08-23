@@ -1,3 +1,5 @@
+welcome=Welcome to pploy
+welcome.click_sidebar=Click on a project in the sidebar.
 main.recent_commits=Recent Commits
 main.checkout=Checkout
 main.deploy.production=Deploy to production

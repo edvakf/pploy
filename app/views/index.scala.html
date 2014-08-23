@@ -1,10 +1,24 @@
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUser: Option[User])(implicit lang: Lang)
+@(currentProjectOption: Option[Project], currentUserOption: Option[User])(implicit lang: Lang)
 
 @layout{
-  @main(currentProject, currentUser)
+  @currentProjectOption match {
+    case None => {
+      @welcome()
+    }
+    case Some(currentProject) => {
+      @project(currentProject, currentUserOption)
+    }
+  }
 }{
-  @sidebar(currentProject, currentUser)
+  @sidebarProjects(currentProjectOption)
+
+  @currentProjectOption match {
+    case None => {}
+    case Some(currentProject) => {
+      @sidebarLock(currentProject, currentUserOption)
+    }
+  }
 }

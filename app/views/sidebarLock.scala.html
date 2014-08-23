@@ -1,23 +1,11 @@
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUser: Option[User])(implicit lang: Lang)
-
-<div class="sidebar-section box">
-  <h3>@Messages("sidebar.header.projects")</h3>
-
-  <ul class="nav nav-pills nav-stacked">
-    @Project.allNames.map { name =>
-      <li class="@if(name == currentProject.name) {active}" >
-        <a href="/@name">@name</a>
-      </li>
-    }
-  </ul>
-</div>
+@(currentProject: Project, currentUserOption: Option[User])(implicit lang: Lang)
 
 <form class="sidebar-section box" action="/@currentProject.name/lock" method="POST">
   @if(currentProject.isLocked) {
-    @if(currentProject.isLockedBy(currentUser)) {
+    @if(currentProject.isLockedBy(currentUserOption)) {
       @Messages("sidebar.lock.myself")
       <p class="time-left" data-seconds="@currentProject.lock.secondsLeft">@currentProject.lock.minutesAndSecondsLeft</p>
       <button class="btn btn-success btn-block" name="operation" value="release">@Messages("sidebar.lock.release")</button>
@@ -31,7 +19,7 @@
     <select class="form-control" name="user">
       <option value="">[@Messages("sidebar.user.noselect")]</option>
       @User.allNames.map { name =>
-        <option value="@name" @if(Some(User(name)) == currentUser) { selected }>
+        <option value="@name" @if(Some(User(name)) == currentUserOption) { selected }>
           @name
         </option>
       }
@@ -39,3 +27,4 @@
     <button class="btn btn-success btn-block" name="operation" value="gain">@Messages("sidebar.lock.gain")</button>
   }
 </form>
+

@@ -3,8 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index(project = null)
-GET     /:project                   controllers.Application.index(project)
+GET     /                           controllers.Application.index()
+GET     /:project                   controllers.Application.project(project)
 POST    /:project/lock               controllers.Application.lock(project)
 #POST    /:project/checkout          controllers.Application.checkout(project)
 #POST    /:project/deploy/:target    controllers.Application.deploy(project, target)

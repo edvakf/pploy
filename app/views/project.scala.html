@@ -1,14 +1,14 @@
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUser: Option[User])(implicit lang: Lang)
+@(currentProject: Project, currentUserOption: Option[User])(implicit lang: Lang)
 
-<div class="panel @if(currentProject.isLockedBy(currentUser)) {panel-danger}else{panel-primary}">
+<div class="panel @if(currentProject.isLockedBy(currentUserOption)) {panel-danger}else{panel-primary}">
   <div class="panel-heading">
     <h2 class="panel-title">@currentProject.name</h2>
   </div>
 
-  @if(currentProject.isLockedBy(currentUser)) {
+  @if(currentProject.isLockedBy(currentUserOption)) {
     <div class="well">
       <h4>@Messages("main.checkout")</h4>
       <form action="/@currentProject.name/checkout" method="post" class="form-inline">

@@ -18,13 +18,19 @@ object Application extends Controller {
       .flatMap { _.headOption }
   }
 
-  def index(project: String) = Action { request =>
-    val proj = Project(Option(project))
+  def index() = Action { request =>
+    val lang = Lang.preferred(request.acceptLanguages)
+    // FIXME: somehow lang is not passed as implicit
+    Ok(views.html.index(None, None)(lang))
+  }
+
+  def project(project: String) = Action { request =>
+    val proj = Project(project)
     val user = getCurrentUser(request)
 
     val lang = Lang.preferred(request.acceptLanguages)
     // FIXME: somehow lang is not passed as implicit
-    Ok(views.html.index(proj, user)(lang))
+    Ok(views.html.index(Some(proj), user)(lang))
   }
 
   def lock(project: String) = Action { request =>

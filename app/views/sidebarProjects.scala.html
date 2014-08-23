@@ -1,0 +1,15 @@
+@import models.Project
+
+@(currentProjectOption: Option[Project])(implicit lang: Lang)
+
+<div class="sidebar-section box">
+  <h3>@Messages("sidebar.header.projects")</h3>
+
+  <ul class="nav nav-pills nav-stacked">
+    @Project.allNames.map { name =>
+      <li class="@if(currentProjectOption.isDefined && currentProjectOption.get.name == name) {active}" >
+        <a href="/@name">@name</a>
+      </li>
+    }
+  </ul>
+</div>
