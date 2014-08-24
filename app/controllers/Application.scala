@@ -49,26 +49,29 @@ object Application extends Controller {
 
   def lock(project: String) = Action { implicit request =>
     val proj = Project(project)
+    var result = Redirect("/"+proj.name)
 
     getSinglePostParam(request, "user") match {
-      case None =>
-        Redirect("/"+proj.name)
+      case None => result
 
       case Some(userName) =>
         val user = User(userName)
+        result = result.withCookies(Cookie("user", userName, Some(3600*24*7)))
 
-        getSinglePostParam(request, "operation") match {
-          case Some("gain") => proj.gainLock(user)
-          case Some("release") => proj.releaseLock(user)
-          case Some("extend") => proj.extendLock(user)
-          case _ =>
-            throw new RuntimeException("operation not specified")
+        try {
+          getSinglePostParam(request, "operation") match {
+            case Some("gain") => proj.gainLock(user)
+            case Some("release") => proj.releaseLock(user)
+            case Some("extend") => proj.extendLock(user)
+            case _ =>
+              throw new RuntimeException("operation not specified")
+          }
+          result
+
+        } catch {
+          case e: LockOperationException =>
+            result.flashing("message" -> e.getMessage)
         }
-
-        // don't fail if lock operation couldn't succeed (unless program error)
-        Redirect("/"+proj.name).withCookies(
-          Cookie("user", userName, Some(3600*24*7))
-        )
     }
   }
 

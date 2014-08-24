@@ -12,3 +12,5 @@ sidebar.lock.myself=デプロイ中です
 sidebar.lock.extend={0}分延長する
 sidebar.lock.release=デプロイを終了する
 sidebar.lock.gain=デプロイを開始する
+lock.operation.expired=デプロイ時間切れです
+lock.operation.taken=他の人がデプロイ中です

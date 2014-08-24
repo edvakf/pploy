@@ -2,6 +2,7 @@ package models
 
 import org.joda.time.DateTime
 import play.api.Play.current
+import play.api.i18n.{Messages, Lang}
 
 case class Project(name: String) {
   if (!Project.allNames.contains(name)) {
@@ -27,33 +28,30 @@ case class Project(name: String) {
     user.isDefined && isLockedBy(user.get)
   }
 
-  def gainLock(user: User): Boolean = {
+  def gainLock(user: User) = {
     lock_ match {
-      case Some(_) =>
-        false
       case None =>
         Lock.save(this, user, new DateTime().plusMinutes(Project.gainMinutes))
-        true
+      case otherwise =>
+        throw new LockOperationException(otherwise)
     }
   }
 
-  def extendLock(user: User): Boolean = {
+  def extendLock(user: User) = {
     lock_ match {
       case Some(lock) if lock.user == user =>
         Lock.save(this, user, lock.endTime.plusMinutes(Project.extendMinutes))
-        true
-      case Some(_) | None =>
-        false
+      case otherwise =>
+        throw new LockOperationException(otherwise)
     }
   }
 
-  def releaseLock(user: User): Boolean = {
+  def releaseLock(user: User) = {
     lock_ match {
       case Some(lock) if lock.user == user =>
         lock.delete()
-        true
-      case Some(_) | None =>
-        false
+      case otherwise =>
+        throw new LockOperationException(otherwise)
     }
   }
 }
@@ -63,4 +61,15 @@ object Project {
 
   lazy val gainMinutes = current.configuration.getInt("pploy.lock.gainMinutes").get
   lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
+}
+
+class LockOperationException(message: String = null, cause: Throwable = null)
+  extends RuntimeException(message, cause) {
+
+  def this(lock: Option[Lock]) = this(lock match {
+    case None => "lock.operation.expired"
+    case Some(_) => "lock.operation.taken"
+  })
+
+  def getMessage(implicit lang: Lang) = Messages(super.getMessage)(lang)
 }

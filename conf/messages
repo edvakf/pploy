@@ -11,3 +11,5 @@ sidebar.lock.myself=Deploying
 sidebar.lock.extend=Extend {0} minutes
 sidebar.lock.release=Finish deploying
 sidebar.lock.gain=Start deploying
+lock.operation.expired=Your lock is expired
+lock.operation.taken=Lock to this project is held by someone else
