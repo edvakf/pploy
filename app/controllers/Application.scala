@@ -32,10 +32,7 @@ object Application extends Controller {
           Logger.info(f"created new project ${repo.name}")
           Redirect("/" + repo.name)
         } catch { case e: Exception =>
-          Logger.debug(e.getMessage)
-          Redirect("/").flashing(
-            "message" -> e.getMessage
-          )
+          Redirect("/").flashing("message" -> e.getMessage)
         }
     }
   }
@@ -68,9 +65,8 @@ object Application extends Controller {
           }
           result
 
-        } catch {
-          case e: LockOperationException =>
-            result.flashing("message" -> e.getMessage)
+        } catch { case e: LockOperationException =>
+          result.flashing("message" -> e.getMessage)
         }
     }
   }
