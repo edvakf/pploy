@@ -65,7 +65,7 @@ object Application extends Controller {
           }
           result
 
-        } catch { case e: LockOperationException =>
+        } catch { case e: LockStatusException =>
           result.flashing("message" -> e.getMessage)
         }
     }

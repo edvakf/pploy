@@ -32,8 +32,8 @@ case class Project(name: String) {
     lock_ match {
       case None =>
         Lock.save(this, user, new DateTime().plusMinutes(Project.gainMinutes))
-      case otherwise =>
-        throw new LockOperationException(otherwise)
+      case _ =>
+        throw new LockStatusException(this, user)
     }
   }
 
@@ -41,8 +41,8 @@ case class Project(name: String) {
     lock_ match {
       case Some(lock) if lock.user == user =>
         Lock.save(this, user, lock.endTime.plusMinutes(Project.extendMinutes))
-      case otherwise =>
-        throw new LockOperationException(otherwise)
+      case _ =>
+        throw new LockStatusException(this, user)
     }
   }
 
@@ -50,8 +50,8 @@ case class Project(name: String) {
     lock_ match {
       case Some(lock) if lock.user == user =>
         lock.delete()
-      case otherwise =>
-        throw new LockOperationException(otherwise)
+      case _ =>
+        throw new LockStatusException(this, user)
     }
   }
 }
@@ -63,13 +63,12 @@ object Project {
   lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
 }
 
-class LockOperationException(message: String = null, cause: Throwable = null)
+class LockStatusException(message: String = null, cause: Throwable = null)
   extends RuntimeException(message, cause) {
 
-  def this(lock: Option[Lock]) = this(lock match {
-    case None => "lock.operation.expired"
-    case Some(_) => "lock.operation.taken"
-  })
+  def this(project: Project, user: User) = this(
+    if (project.isLocked) "lock.operation.taken" else "lock.operation.expired"
+  )
 
   def getMessage(implicit lang: Lang) = Messages(super.getMessage)(lang)
 }
