@@ -1,5 +1,6 @@
 welcome=pployへようこそ
 welcome.click_sidebar=サイドバーのプロジェクト名をクリックしてください
+welcome.add_project=プロジェクトを追加する
 main.recent_commits=最近のコミット
 main.checkout=チェックアウト
 main.deploy.production=本番にデプロイ

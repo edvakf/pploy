@@ -1,10 +1,10 @@
 package controllers
 
+import play.api._
 import play.api.i18n._
 import play.api.mvc._
-import models.Project
-import models.User
 import play.api.Play.current
+import models._
 
 object Application extends Controller {
   def getCurrentUser(request: Request[AnyContent]) = {
@@ -22,6 +22,24 @@ object Application extends Controller {
     val lang = Lang.preferred(request.acceptLanguages)
     // FIXME: somehow lang is not passed as implicit
     Ok(views.html.index(None, None)(lang))
+  }
+
+  def repo() = Action { request =>
+    getSinglePostParam(request, "url") match {
+      case None =>
+        throw new RuntimeException("url not given")
+      case Some(url) =>
+        try {
+          val repo = Repo.clone(url)
+          Logger.info(f"created new project ${repo.name}")
+          Redirect("/" + repo.name)
+        } catch { case e: Exception =>
+          Logger.debug(e.getMessage)
+          Redirect("/").flashing(
+            "message" -> e.getMessage
+          )
+        }
+    }
   }
 
   def project(project: String) = Action { request =>
