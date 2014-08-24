@@ -1,0 +1,122 @@
+@import models.Commit
+
+@(commits: Iterable[Commit])
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<style>
+body, html {
+margin: 0;
+padding: 0;
+}
+.commits table {
+width: 100%;
+width: calc(100% - 1px); /* th,tdのborderの1pxをどうにかすればいいんだけどよくわからない */
+border-collapse: collapse;
+}
+.commits th {
+padding: 3px;
+border: solid gray 1px;
+border-bottom: solid black 2px;
+background: #eee;
+font-size: 14px;
+}
+.commits td {
+padding: 3px;
+border: solid gray 1px;
+font-size: 14px;
+font-family: monospace;
+}
+.commits .header {
+background: #eee;
+}
+.commits .subject {
+background: #eee;
+font-weight: bold;
+}
+.commits .code {
+padding: 10px 6px 20px;
+}
+.commits .code pre {
+margin: 0;
+}
+.commits a {
+color: #2fa0bb;
+font-weight: bold;
+text-decoration: none;
+}
+.ref {
+display: inline-block;
+margin: 2px 0;
+padding: 2px 4px;
+border-radius: 4px;
+background: #999;
+color: #fff;
+font-size: 12px;
+}
+.ref.tag {
+background: #418be5;
+color: #fff;
+}
+.ref.master {
+background: #00c53d;
+color: #fff;
+}
+.ref.head {
+background: #e53d5f;
+color: #fff;
+}
+</style>
+</head>
+<body>
+  <div class="commits">
+    <table>
+      <tbody>
+        @commits.map { commit =>
+          <tr class="header">
+            <td>
+              @commit.abbrev
+            </td>
+            <td nowrap>@commit.author</td>
+            <td>
+              @commit.otherRefs.map { ref =>
+                @ref match {
+                  case "HEAD"          => {
+                    <span class="ref head">HEAD</span>
+                  }
+                  case _ if ref.startsWith("refs/remotes/origin/master") => {
+                    <span class="ref master">origin/master</span>
+                  }
+                  case _ if ref.startsWith("refs/remotes/") => {
+                    <span class="ref">@ref.stripPrefix("refs/remotes/")</span>
+                  }
+                  case _ if ref.startsWith("refs/heads/") => {}
+                  case _ if ref.startsWith("refs/tags/") => {
+                    <span class="ref tag">@ref</span>
+                  }
+                  case _ => {
+                    <span class="ref">@ref</span>
+                  }
+                }
+              }
+            </td>
+            <td nowrap>@commit.datetime</td>
+          </tr>
+          <tr class="subject">
+            <td colspan="5">@commit.subject</td>
+          </tr>
+          <tr>
+            <td class="code" colspan="5">
+            <pre>@commit.nameStatus</pre>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
+
+

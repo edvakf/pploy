@@ -90,6 +90,13 @@ object Application extends Controller {
     }
   }
 
+  def commits(project: String) = Action { implicit request =>
+    val proj = Project(project)
+    val repo = Repo(proj.name)
+    val commits = repo.commits()
+    Ok(views.html.commits(commits))
+  }
+
   /*
   def deploy(project: String, target: String) = Action {
   }
