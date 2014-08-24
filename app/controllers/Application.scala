@@ -22,7 +22,7 @@ object Application extends Controller {
     Ok(views.html.index(None, None))
   }
 
-  def repo() = Action { request =>
+  def create() = Action { request =>
     getSinglePostParam(request, "url") match {
       case None =>
         throw new RuntimeException("url not given")

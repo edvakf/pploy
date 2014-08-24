@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index()
-POST    /repo                       controllers.Application.repo()
+POST    /create                     controllers.Application.create()
 GET     /:project                   controllers.Application.project(project)
 POST    /:project/lock              controllers.Application.lock(project)
 POST    /:project/checkout          controllers.Application.checkout(project)
