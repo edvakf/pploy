@@ -12,8 +12,8 @@
     <div class="well">
       <h4>@Messages("main.checkout")</h4>
       <form action="/@currentProject.name/checkout" method="post" class="form-inline">
-        <input type="text" class="form-control" name="commit" value="origin/master">
-        <button class="btn btn-success" type="button">@Messages("main.checkout")</button>
+        <input type="text" class="form-control" name="ref" value="origin/master" required>
+        <button class="btn btn-success" type="submit">@Messages("main.checkout")</button>
       </form>
       <h4>@Messages("main.deploy.staging")</h4>
       <form action="/@currentProject.name/deploy" method="post">

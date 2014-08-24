@@ -71,13 +71,26 @@ object Application extends Controller {
     }
   }
 
+  def checkout(project: String) = Action { implicit request =>
+    val proj = Project(project)
+    val userOption = getCurrentUser(request)
+    if (userOption.isEmpty) throw new RuntimeException("user not selected")
+    val user = userOption.get
+
+    if (!proj.isLockedBy(user)) throw new LockStatusException(proj, user)
+
+    val refOption = getSinglePostParam(request, "ref")
+    if (refOption.isEmpty) throw new RuntimeException("ref is empty")
+
+    try {
+      Repo(proj.name).checkout(refOption.get)
+      Redirect("/" + proj.name)
+    } catch { case e: Exception =>
+      Redirect("/" + proj.name).flashing("message" -> e.getMessage)
+    }
+  }
+
   /*
-  def unlock(project: String) = Action {
-  }
-
-  def checkout(project: String) = Action {
-  }
-
   def deploy(project: String, target: String) = Action {
   }
   */
