@@ -1,7 +1,7 @@
 @import models.Project
 @import models.User
 
-@(currentProjectOption: Option[Project], currentUserOption: Option[User])(implicit lang: Lang)
+@(currentProjectOption: Option[Project], currentUserOption: Option[User])(implicit lang: Lang, flash: Flash)
 
 @layout{
   @currentProjectOption match {

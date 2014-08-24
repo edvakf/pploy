@@ -1,4 +1,4 @@
-@(mainContent: Html)(sidebarContent: Html)(implicit lang: Lang)
+@(mainContent: Html)(sidebarContent: Html)(implicit lang: Lang, flash: Flash)
 
 <!DOCTYPE html>
 
@@ -20,6 +20,12 @@
           <a class="navbar-brand">pploy</a>
         </div>
       </div>
+
+      @flash.get("message").map{ message =>
+        <div class="alert-danger">
+          <div class="container">@message</div>
+        </div>
+      }
     </header>
     <div class="container">
       <div class="row">
