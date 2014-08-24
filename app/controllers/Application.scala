@@ -18,10 +18,8 @@ object Application extends Controller {
       .flatMap { _.headOption }
   }
 
-  def index() = Action { request =>
-    val lang = Lang.preferred(request.acceptLanguages)
-    // FIXME: somehow lang is not passed as implicit
-    Ok(views.html.index(None, None)(lang))
+  def index() = Action { implicit request =>
+    Ok(views.html.index(None, None))
   }
 
   def repo() = Action { request =>
@@ -42,16 +40,14 @@ object Application extends Controller {
     }
   }
 
-  def project(project: String) = Action { request =>
+  def project(project: String) = Action { implicit request =>
     val proj = Project(project)
     val user = getCurrentUser(request)
 
-    val lang = Lang.preferred(request.acceptLanguages)
-    // FIXME: somehow lang is not passed as implicit
-    Ok(views.html.index(Some(proj), user)(lang))
+    Ok(views.html.index(Some(proj), user))
   }
 
-  def lock(project: String) = Action { request =>
+  def lock(project: String) = Action { implicit request =>
     val proj = Project(project)
 
     getSinglePostParam(request, "user") match {
