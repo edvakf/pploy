@@ -13,7 +13,7 @@ case class Project(name: String) {
     case Some(l) if l.secondsLeft <= 0 =>
       l.delete()
       None
-    case other => identity(other)
+    case other => other
   }
   def isLocked = lock_.isDefined
 
