@@ -13,15 +13,15 @@
       <h4>@Messages("main.checkout")</h4>
       <form action="/@currentProject.name/checkout" method="post" class="form-inline">
         <input type="text" class="form-control" name="ref" value="origin/master" required>
-        <button class="btn btn-success" type="submit">@Messages("main.checkout")</button>
+        <button class="btn btn-success">@Messages("main.checkout")</button>
       </form>
       <h4>@Messages("main.deploy.staging")</h4>
-      <form action="/@currentProject.name/deploy" method="post">
-        <button class="btn btn-success" type="button" name="target" value="staging">@Messages("main.deploy.staging")</button>
+      <form action="/@currentProject.name/deploy" method="post" target="_blank">
+        <button class="btn btn-success" name="target" value="staging">@Messages("main.deploy.staging")</button>
       </form>
       <h4>@Messages("main.deploy.production")</h4>
-      <form action="/@currentProject.name/deploy" method="post">
-        <button class="btn btn-success" type="button" name="target" value="production">@Messages("main.deploy.production")</button>
+      <form action="/@currentProject.name/deploy" method="post" target="_blank">
+        <button class="btn btn-success" name="target" value="production">@Messages("main.deploy.production")</button>
       </form>
     </div>
   }

@@ -9,7 +9,7 @@ GET     /:project                   controllers.Application.project(project)
 POST    /:project/lock              controllers.Application.lock(project)
 POST    /:project/checkout          controllers.Application.checkout(project)
 GET     /:project/commits           controllers.Application.commits(project)
-#POST    /:project/deploy/:target    controllers.Application.deploy(project, target)
+POST    /:project/deploy            controllers.Application.deploy(project)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

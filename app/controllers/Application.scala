@@ -5,6 +5,7 @@ import play.api.i18n._
 import play.api.mvc._
 import play.api.Play.current
 import models._
+import playcli.CLI
 
 object Application extends Controller {
   def getCurrentUser(request: Request[AnyContent]) = {
@@ -97,9 +98,21 @@ object Application extends Controller {
     Ok(views.html.commits(commits))
   }
 
-  /*
-  def deploy(project: String, target: String) = Action {
+  def deploy(project: String) = Action { implicit request =>
+    val proj = Project(project)
+    val userOption = getCurrentUser(request)
+    if (userOption.isEmpty) throw new RuntimeException("user not selected")
+    val user = userOption.get
+
+    if (!proj.isLockedBy(user)) throw new LockStatusException(proj, user)
+
+    val targetOption = getSinglePostParam(request, "target")
+    if (targetOption.isEmpty) throw new RuntimeException("target is empty")
+
+    val repo = Repo(proj.name)
+
+    Ok.chunked(CLI.enumerate(repo.deploy(targetOption.get, user.name)))
+      .withHeaders("Content-Type" -> "text/plain")
   }
-  */
 
 }

@@ -10,6 +10,7 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import play.api.Logger
 import scala.collection.JavaConversions._
+import scala.sys.process._
 
 case class Repo(name: String) {
   lazy val dir = new File(new File(WorkingDir.projectsDir.toString), name)
@@ -43,6 +44,16 @@ case class Repo(name: String) {
     commits.map { c =>
       new Commit(git, c)
     }
+  }
+
+  def deploy(target: String, user: String): ProcessBuilder = {
+    Logger.info("bash -c '.deploy/bin/deploy 2>&1'")
+    Process(
+      Seq("bash", "-c", ".deploy/bin/deploy 2>&1"),
+      dir,
+      "DEPLOY_ENV" -> target,
+      "DEPLOY_USER" -> user
+    )
   }
 }
 
