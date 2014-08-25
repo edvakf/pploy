@@ -1,0 +1,84 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+.commits {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+  }
+
+  th, td {
+    padding: 3px;
+    border: solid gray 1px;
+    box-sizing: border-box;
+
+    // http://stackoverflow.com/questions/19068909/why-is-box-sizing-acting-different-on-table-vs-div?answertab=active#tab-top
+    &:first-child {
+      border-left: none;
+    }
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  th {
+    border-bottom: solid black 2px;
+    background: #eee;
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 14px;
+    font-family: monospace;
+  }
+
+  .header {
+    background: #eee;
+  }
+
+  .subject {
+    background: #eee;
+    font-weight: bold;
+  }
+
+  .code {
+    padding: 10px 6px 20px;
+
+    pre {
+      margin: 0;
+    }
+  }
+}
+
+.hash, .hash:link, .hash:visited {
+  color: #2fa0bb;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.ref {
+  display: inline-block;
+  margin: 2px 0;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #999;
+  color: #fff;
+  font-size: 12px;
+
+  &.tag {
+    background: #418be5;
+    color: #fff;
+  }
+
+  &.master {
+    background: #00c53d;
+    color: #fff;
+  }
+
+  &.head {
+    background: #e53d5f;
+    color: #fff;
+  }
+}

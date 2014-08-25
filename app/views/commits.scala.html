@@ -6,69 +6,7 @@
 
 <html>
 <head>
-<style>
-body, html {
-margin: 0;
-padding: 0;
-}
-.commits table {
-width: 100%;
-width: calc(100% - 1px); /* th,tdのborderの1pxをどうにかすればいいんだけどよくわからない */
-border-collapse: collapse;
-}
-.commits th {
-padding: 3px;
-border: solid gray 1px;
-border-bottom: solid black 2px;
-background: #eee;
-font-size: 14px;
-}
-.commits td {
-padding: 3px;
-border: solid gray 1px;
-font-size: 14px;
-font-family: monospace;
-}
-.commits .header {
-background: #eee;
-}
-.commits .subject {
-background: #eee;
-font-weight: bold;
-}
-.commits .code {
-padding: 10px 6px 20px;
-}
-.commits .code pre {
-margin: 0;
-}
-.commits a {
-color: #2fa0bb;
-font-weight: bold;
-text-decoration: none;
-}
-.ref {
-display: inline-block;
-margin: 2px 0;
-padding: 2px 4px;
-border-radius: 4px;
-background: #999;
-color: #fff;
-font-size: 12px;
-}
-.ref.tag {
-background: #418be5;
-color: #fff;
-}
-.ref.master {
-background: #00c53d;
-color: #fff;
-}
-.ref.head {
-background: #e53d5f;
-color: #fff;
-}
-</style>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/commits.css")" />
 </head>
 <body>
   <div class="commits">
@@ -76,7 +14,7 @@ color: #fff;
       <tbody>
         @commits.map { commit =>
           <tr class="header">
-            <td>
+            <td class="hash">
               @commit.abbrev
             </td>
             <td nowrap>@commit.author</td>
