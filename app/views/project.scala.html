@@ -15,18 +15,21 @@
         <input type="text" class="form-control" name="ref" value="origin/master" required>
         <button class="btn btn-success">@Messages("main.checkout")</button>
       </form>
-      <h4>@Messages("main.deploy.staging")</h4>
-      <form action="/@currentProject.name/deploy" method="post" target="_blank">
+      <form action="/@currentProject.name/deploy" method="post" target="deploy-log-frame" id="deploy-form">
+        <h4>@Messages("main.deploy.staging")</h4>
         <button class="btn btn-success" name="target" value="staging">@Messages("main.deploy.staging")</button>
-      </form>
-      <h4>@Messages("main.deploy.production")</h4>
-      <form action="/@currentProject.name/deploy" method="post" target="_blank">
+
+        <h4>@Messages("main.deploy.production")</h4>
         <button class="btn btn-success" name="target" value="production">@Messages("main.deploy.production")</button>
       </form>
     </div>
   }
 
   <div class="panel-body">
+    <div id="deploy-log" class="embed-responsive embed-responsive-16by9">
+      <iframe name="deploy-log-frame" class="log-frame embed-responsive-item" src="about:blank"></iframe>
+    </div>
+
     <h3>@Messages("main.recent_commits")</h3>
     <div class="embed-responsive embed-responsive-16by9">
       <iframe class="log-frame embed-responsive-item" src="@routes.Application.commits(currentProject.name)"></iframe>
