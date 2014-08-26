@@ -21,7 +21,7 @@
             <td>
               @commit.otherRefs.map { ref =>
                 @ref match {
-                  case "HEAD"          => {
+                  case "HEAD" => {
                     <span class="ref head">HEAD</span>
                   }
                   case _ if ref.startsWith("refs/remotes/origin/master") => {
@@ -32,7 +32,7 @@
                   }
                   case _ if ref.startsWith("refs/heads/") => {}
                   case _ if ref.startsWith("refs/tags/") => {
-                    <span class="ref tag">@ref</span>
+                    <span class="ref tag">@ref.stripPrefix("refs/tags/")</span>
                   }
                   case _ => {
                     <span class="ref">@ref</span>
