@@ -110,7 +110,7 @@ object Application extends Controller {
       .withHeaders("Content-Type" -> "text/plain")
   }
 
-  def prevlog(project: String) = Action { implicit request =>
+  def logs(project: String) = Action { implicit request =>
     val proj = Project(project)
     val file = new Deploy(proj.repo).logfile
     if (file.isFile) {
