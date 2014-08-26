@@ -31,6 +31,9 @@ case class Project(name: String) {
   def isLockedBy(user: Option[User]): Boolean = {
     user.isDefined && isLockedBy(user.get)
   }
+  def assertLockedByUser(user: User) = {
+    if (!isLockedBy(user)) new LockStatusException(this, user)
+  }
 
   def gainLock(user: User) = {
     lock_ match {

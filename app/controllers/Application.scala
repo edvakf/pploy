@@ -74,43 +74,45 @@ object Application extends Controller {
     }
   }
 
+  val checkoutForm = Form( "ref" -> text )
+
   def checkout(project: String) = Action { implicit request =>
     val proj = Project(project)
-    val userOption = getCurrentUser(request)
-    if (userOption.isEmpty) throw new RuntimeException("user not selected")
-    val user = userOption.get
+    val user = getCurrentUser(request) match {
+      case None => throw new RuntimeException("user not selected")
+      case Some(u) => u
+    }
+    proj.assertLockedByUser(user)
 
-    if (!proj.isLockedBy(user)) throw new LockStatusException(proj, user)
-
-    val refOption = getSinglePostParam(request, "ref")
-    if (refOption.isEmpty) throw new RuntimeException("ref is empty")
+    val ref = checkoutForm.bindFromRequest.get
 
     try {
-      proj.checkout(refOption.get)
+      proj.checkout(ref)
       Redirect("/" + proj.name)
     } catch { case e: Exception =>
       Redirect("/" + proj.name).flashing("message" -> e.getMessage)
     }
   }
 
-  def commits(project: String) = Action { implicit request =>
-    val proj = Project(project)
-    Ok(views.html.commits(proj.repo.commits))
-  }
+  val deployForm = Form( "target" -> text )
 
   def deploy(project: String) = Action { implicit request =>
     val proj = Project(project)
-    val userOption = getCurrentUser(request)
-    if (userOption.isEmpty) throw new RuntimeException("user not selected")
-    val user = userOption.get
+    val user = getCurrentUser(request) match {
+      case None => throw new RuntimeException("user not selected")
+      case Some(u) => u
+    }
+    proj.assertLockedByUser(user)
 
-    if (!proj.isLockedBy(user)) throw new LockStatusException(proj, user)
+    val target = checkoutForm.bindFromRequest.get
 
-    val targetOption = getSinglePostParam(request, "target")
-    if (targetOption.isEmpty) throw new RuntimeException("target is empty")
-
-    Ok.chunked(CLI.enumerate(proj.execDeploy(user, targetOption.get)))
+    Ok.chunked(CLI.enumerate(proj.execDeploy(user, target)))
       .withHeaders("Content-Type" -> "text/plain")
+  }
+
+  def commits(project: String) = Action { implicit request =>
+    val proj = Project(project)
+    Ok(views.html.commits(proj.repo.commits))
   }
 
   def logs(project: String) = Action { implicit request =>
