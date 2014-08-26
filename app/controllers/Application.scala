@@ -22,7 +22,7 @@ object Application extends Controller {
   }
 
   def index() = Action { implicit request =>
-    Ok(views.html.index(None, None))
+    Ok(views.html.index())
   }
 
   def create() = Action { request =>
