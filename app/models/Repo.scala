@@ -9,36 +9,33 @@ import scala.collection.JavaConversions._
 
 case class Repo(name: String) {
   lazy val dir = new File(new File(WorkingDir.projectsDir.toString), name)
+  lazy val git = Git.open(dir)
 
   def checkout(ref: String): Unit = {
-    val git = Git.open(dir)
     Logger.info("git fetch --prune")
-    git.fetch().setRemoveDeletedRefs(true).call()
+    git.fetch.setRemoveDeletedRefs(true).call()
 
     Logger.info("git reset --hard " + ref)
-    git.reset().setMode(ResetType.HARD).setRef(ref).call()
+    git.reset.setMode(ResetType.HARD).setRef(ref).call()
 
     Logger.info("git clean -fdx")
-    git.clean().setCleanDirectories(true).call()
+    git.clean.setCleanDirectories(true).call()
 
     Logger.info("git submodule sync")
-    git.submoduleSync().call()
+    git.submoduleSync.call()
 
     Logger.info("git submodule init")
-    git.submoduleInit().call()
+    git.submoduleInit.call()
 
     // --recursive is probably handled by default
     // http://www.codeaffine.com/2014/04/16/how-to-manage-git-submodules-with-jgit/
     Logger.info("git submodule update --recursive")
-    git.submoduleUpdate().call()
+    git.submoduleUpdate.call()
   }
 
-  def commits() = {
-    val git = Git.open(dir)
-    val commits = git.log().setMaxCount(20).call()
-    commits.map { c =>
-      new Commit(git, c)
-    }
+  def commits = {
+    val commits = git.log.setMaxCount(20).call()
+    commits.map { new Commit(git, _) }
   }
 }
 
