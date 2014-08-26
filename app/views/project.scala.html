@@ -34,6 +34,11 @@
     <div class="embed-responsive embed-responsive-16by9">
       <iframe class="log-frame embed-responsive-item" src="@routes.Application.commits(currentProject.name)"></iframe>
     </div>
+
+    <h3>@Messages("main.previous_log")</h3>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe class="log-frame embed-responsive-item" src="@routes.Application.prevlog(currentProject.name)"></iframe>
+    </div>
   </div>
 </div>
 

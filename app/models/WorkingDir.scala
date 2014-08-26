@@ -13,11 +13,13 @@ object WorkingDir {
   }
 
   lazy val projectsDir = Paths.get(dirname_, "projects")
+  lazy val logsDir = Paths.get(dirname_, "logs")
 
   def setup(dirname: String) = {
     dirname_ = dirname
     mkdir(Paths.get(dirname))
     mkdir(projectsDir)
+    mkdir(logsDir)
   }
 
   private def mkdir(path: Path): Unit = {

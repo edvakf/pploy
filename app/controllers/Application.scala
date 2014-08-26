@@ -111,8 +111,19 @@ object Application extends Controller {
 
     val repo = Repo(proj.name)
 
-    Ok.chunked(CLI.enumerate(repo.deploy(targetOption.get, user.name)))
+    Ok.chunked(CLI.enumerate(new Deploy(repo).execute(targetOption.get, user)))
       .withHeaders("Content-Type" -> "text/plain")
+  }
+
+  def prevlog(project: String) = Action { implicit request =>
+    val proj = Project(project)
+    val repo = Repo(proj.name)
+    val file = new Deploy(repo).logfile
+    if (file.isFile) {
+      Ok.sendFile(content = file, inline = true)
+    } else {
+      Ok("")
+    }
   }
 
 }
