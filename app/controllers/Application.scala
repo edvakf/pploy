@@ -3,7 +3,8 @@ package controllers
 import java.io.File
 
 import play.api._
-import play.api.i18n._
+import play.api.data.Form
+import play.api.data.Forms._
 import play.api.mvc._
 import play.api.Play.current
 import models._
@@ -21,21 +22,19 @@ object Application extends Controller {
       .flatMap { _.headOption }
   }
 
+  val createProjectForm = Form( "url" -> text )
+
   def index() = Action { implicit request =>
     Ok(views.html.index())
   }
 
-  def create() = Action { request =>
-    getSinglePostParam(request, "url") match {
-      case None =>
-        throw new RuntimeException("url not given")
-      case Some(url) =>
-        try {
-          val proj = Project(Repo.clone(url))
-          Redirect("/" + proj.name)
-        } catch { case e: Exception =>
-          Redirect("/").flashing("message" -> e.getMessage)
-        }
+  def create() = Action { implicit request =>
+    val url = createProjectForm.bindFromRequest.get
+    try {
+      val proj = Project(Repo.clone(url))
+      Redirect("/" + proj.name)
+    } catch { case e: Exception =>
+      Redirect("/").flashing("message" -> e.getMessage)
     }
   }
 
