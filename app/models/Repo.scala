@@ -8,7 +8,7 @@ import play.api.Logger
 import scala.collection.JavaConversions._
 
 case class Repo(name: String) {
-  lazy val dir = new File(new File(WorkingDir.projectsDir.toString), name)
+  lazy val dir = new File(WorkingDir.projectDir(name).toString)
   lazy val git = Git.open(dir)
 
   def checkout(ref: String): Unit = {
