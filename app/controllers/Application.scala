@@ -121,7 +121,7 @@ object Application extends Controller {
     if (file.isFile) {
       Ok.sendFile(content = file, inline = true)
     } else {
-      Ok("")
+      NotFound
     }
   }
 
