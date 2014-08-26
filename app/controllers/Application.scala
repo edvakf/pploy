@@ -29,9 +29,8 @@ object Application extends Controller {
         throw new RuntimeException("url not given")
       case Some(url) =>
         try {
-          val repo = Repo.clone(url)
-          Logger.info(f"created new project ${repo.name}")
-          Redirect("/" + repo.name)
+          val proj = Project(Repo.clone(url))
+          Redirect("/" + proj.name)
         } catch { case e: Exception =>
           Redirect("/").flashing("message" -> e.getMessage)
         }
@@ -84,7 +83,7 @@ object Application extends Controller {
     if (refOption.isEmpty) throw new RuntimeException("ref is empty")
 
     try {
-      Repo(proj.name).checkout(refOption.get)
+      proj.checkout(refOption.get)
       Redirect("/" + proj.name)
     } catch { case e: Exception =>
       Redirect("/" + proj.name).flashing("message" -> e.getMessage)
@@ -93,8 +92,7 @@ object Application extends Controller {
 
   def commits(project: String) = Action { implicit request =>
     val proj = Project(project)
-    val repo = Repo(proj.name)
-    val commits = repo.commits()
+    val commits = proj.repo.commits()
     Ok(views.html.commits(commits))
   }
 
@@ -109,16 +107,13 @@ object Application extends Controller {
     val targetOption = getSinglePostParam(request, "target")
     if (targetOption.isEmpty) throw new RuntimeException("target is empty")
 
-    val repo = Repo(proj.name)
-
-    Ok.chunked(CLI.enumerate(new Deploy(repo).execute(targetOption.get, user)))
+    Ok.chunked(CLI.enumerate(new Deploy(proj.repo).execute(targetOption.get, user)))
       .withHeaders("Content-Type" -> "text/plain")
   }
 
   def prevlog(project: String) = Action { implicit request =>
     val proj = Project(project)
-    val repo = Repo(proj.name)
-    val file = new Deploy(repo).logfile
+    val file = new Deploy(proj.repo).logfile
     if (file.isFile) {
       Ok.sendFile(content = file, inline = true)
     } else {

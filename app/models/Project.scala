@@ -9,6 +9,8 @@ case class Project(name: String) {
     throw new IllegalArgumentException("bad project name")
   }
 
+  lazy val repo = Repo(name)
+
   private lazy val lock_ = Lock.fetch(this) match {
     case Some(l) if l.secondsLeft <= 0 =>
       l.delete()
@@ -54,6 +56,8 @@ case class Project(name: String) {
         throw new LockStatusException(this, user)
     }
   }
+
+  def checkout(ref: String) = repo.checkout(ref)
 }
 
 object Project {
@@ -61,6 +65,8 @@ object Project {
 
   lazy val gainMinutes = current.configuration.getInt("pploy.lock.gainMinutes").get
   lazy val extendMinutes = current.configuration.getInt("pploy.lock.extendMinutes").get
+
+  def apply(repo: Repo): Project = Project(repo.name)
 }
 
 class LockStatusException(message: String = null, cause: Throwable = null)

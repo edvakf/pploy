@@ -48,10 +48,10 @@ case class Repo(name: String) {
 
 object Repo {
   def clone(url: String): Repo = {
-    val name = new URIish(url).getHumanishName
-    val repo = Repo(name)
+    val uriish = new URIish(url)
+    val repo = Repo(uriish.getHumanishName)
     Logger.info(f"cloning $url to ${repo.dir.toString}")
-    val git = Git.cloneRepository.setURI(url).setDirectory(repo.dir).call()
+    Git.cloneRepository.setURI(url).setDirectory(repo.dir).call()
     repo
   }
 }
