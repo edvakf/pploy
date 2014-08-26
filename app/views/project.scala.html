@@ -1,0 +1,12 @@
+@import models.Project
+@import models.User
+
+@(currentProject: Project, currentUserOption: Option[User])(implicit lang: Lang, flash: Flash)
+
+@layout{
+  @main(currentProject, currentUserOption)
+}{
+  @sidebarProjects(Some(currentProject))
+  @sidebarLock(currentProject, currentUserOption)
+}
+

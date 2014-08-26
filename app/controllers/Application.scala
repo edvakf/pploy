@@ -43,7 +43,7 @@ object Application extends Controller {
     val proj = Project(project)
     val user = getCurrentUser(request)
 
-    Ok(views.html.index(Some(proj), user))
+    Ok(views.html.project(proj, user))
   }
 
   def lock(project: String) = Action { implicit request =>
