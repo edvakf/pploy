@@ -1,4 +1,5 @@
 package models
+
 import java.nio.file.{Files, Paths, Path}
 import play.api.Logger
 
@@ -14,6 +15,8 @@ object WorkingDir {
 
   lazy val projectsDir = Paths.get(dirname_, "projects")
   lazy val logsDir = Paths.get(dirname_, "logs")
+
+  def logFile(project: String) = logsDir.resolve(project + ".log")
 
   def setup(dirname: String) = {
     dirname_ = dirname

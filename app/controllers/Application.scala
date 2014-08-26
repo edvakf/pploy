@@ -1,5 +1,7 @@
 package controllers
 
+import java.io.File
+
 import play.api._
 import play.api.i18n._
 import play.api.mvc._
@@ -106,13 +108,13 @@ object Application extends Controller {
     val targetOption = getSinglePostParam(request, "target")
     if (targetOption.isEmpty) throw new RuntimeException("target is empty")
 
-    Ok.chunked(CLI.enumerate(new Deploy(proj.repo).execute(targetOption.get, user)))
+    Ok.chunked(CLI.enumerate(proj.execDeploy(user, targetOption.get)))
       .withHeaders("Content-Type" -> "text/plain")
   }
 
   def logs(project: String) = Action { implicit request =>
     val proj = Project(project)
-    val file = new Deploy(proj.repo).logfile
+    val file = new File(WorkingDir.logFile(proj.name).toString)
     if (file.isFile) {
       Ok.sendFile(content = file, inline = true)
     } else {

@@ -1,8 +1,10 @@
 package models
 
 import org.joda.time.DateTime
+import play.api.Logger
 import play.api.Play.current
 import play.api.i18n.{Messages, Lang}
+import scala.sys.process._
 
 case class Project(name: String) {
   if (!Project.allNames.contains(name)) {
@@ -58,6 +60,17 @@ case class Project(name: String) {
   }
 
   def checkout(ref: String) = repo.checkout(ref)
+
+  def execDeploy(user: User, target: String): ProcessBuilder = {
+    Logger.info("bash -c '.deploy/bin/deploy 2>&1'")
+    Process(
+      Seq("bash", "-c", ".deploy/bin/deploy 2>&1"),
+      repo.dir,
+      "DEPLOY_ENV" -> target,
+      "DEPLOY_USER" -> user.name
+    ) #| Process(Seq("tee", WorkingDir.logFile(name).toString))
+  }
+
 }
 
 object Project {
