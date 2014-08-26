@@ -45,30 +45,32 @@ object Application extends Controller {
     Ok(views.html.project(proj, user))
   }
 
+  val lockOperationForm = Form(tuple( "user" -> text, "operation" -> text ))
+  class UserNameDefaultOption extends RuntimeException
+
   def lock(project: String) = Action { implicit request =>
     val proj = Project(project)
     var result = Redirect("/"+proj.name)
 
-    getSinglePostParam(request, "user") match {
-      case None => result
+    try {
+      val (userName, operation) = lockOperationForm.bindFromRequest.get
+      if (userName == "") throw new UserNameDefaultOption
 
-      case Some(userName) =>
-        val user = User(userName)
-        result = result.withCookies(Cookie("user", userName, Some(3600*24*7)))
+      val user = User(userName)
+      result = result.withCookies(Cookie("user", userName, Some(3600*24*7)))
 
-        try {
-          getSinglePostParam(request, "operation") match {
-            case Some("gain") => proj.gainLock(user)
-            case Some("release") => proj.releaseLock(user)
-            case Some("extend") => proj.extendLock(user)
-            case _ =>
-              throw new RuntimeException("operation not specified")
-          }
-          result
+      operation match {
+        case "gain" => proj.gainLock(user)
+        case "release" => proj.releaseLock(user)
+        case "extend" => proj.extendLock(user)
+        case _ =>
+          throw new RuntimeException("operation not specified")
+      }
+      result
 
-        } catch { case e: LockStatusException =>
-          result.flashing("message" -> e.getMessage)
-        }
+    } catch {
+      case e: UserNameDefaultOption => result
+      case e: LockStatusException => result.flashing("message" -> e.getMessage)
     }
   }
 
