@@ -13,6 +13,8 @@ libraryDependencies ++= Seq(
   ws
 )
 
+libraryDependencies += filters
+
 resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
 
 libraryDependencies += "org.eclipse.jgit" % "org.eclipse.jgit" % "[3.4,)"

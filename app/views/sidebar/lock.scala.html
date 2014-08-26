@@ -1,9 +1,11 @@
+@import helper._
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUserOption: Option[User])(implicit lang: Lang)
+@(currentProject: Project, currentUserOption: Option[User])(implicit request: Request[AnyContent], lang: Lang)
 
 <form class="sidebar-section box" action="/@currentProject.name/lock" method="POST">
+  @CSRF.formField
   @if(currentProject.isLocked) {
     @if(currentProject.isLockedBy(currentUserOption)) {
       @Messages("sidebar.lock.myself")

@@ -1,7 +1,8 @@
+@import helper._
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUserOption: Option[User])(implicit lang: Lang)
+@(currentProject: Project, currentUserOption: Option[User])(implicit request: Request[AnyContent], lang: Lang)
 
 <div class="panel @if(currentProject.isLockedBy(currentUserOption)) {panel-danger}else{panel-primary}">
   <div class="panel-heading">
@@ -12,10 +13,12 @@
     <div class="well">
       <h4>@Messages("main.checkout")</h4>
       <form action="/@currentProject.name/checkout" method="post" class="form-inline">
+        @CSRF.formField
         <input type="text" class="form-control" name="ref" value="origin/master" required>
         <button class="btn btn-success">@Messages("main.checkout")</button>
       </form>
       <form action="/@currentProject.name/deploy" method="post" target="deploy-log-frame" id="deploy-form">
+        @CSRF.formField
         <h4>@Messages("main.deploy.staging")</h4>
         <button class="btn btn-success" name="target" value="staging">@Messages("main.deploy.staging")</button>
 
