@@ -116,10 +116,18 @@ object Application extends Controller {
     val proj = Project(project)
     val file = new File(WorkingDir.logFile(proj.name).toString)
     if (file.isFile) {
+      HTML
       Ok.sendFile(content = file, inline = true)
     } else {
       NotFound
     }
   }
 
+  def readme(project: String) = Action { implicit request =>
+    val proj = Project(project)
+    proj.readme match {
+      case Some(html) => Ok(html)
+      case None => NotFound
+    }
+  }
 }

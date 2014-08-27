@@ -1,8 +1,10 @@
 $ ->
+  fetchReadme()
+
   $ '#deploy-form'
   .on 'submit', (ev) ->
     $ '#deploy-log'
-    .show()
+    .toggleClass 'hidden'
     iframeFollowScroll($ '#deploy-log iframe')
     return
   return
@@ -19,4 +21,13 @@ iframeFollowScroll = (frame) ->
 
   frame.on 'load', ->
     flag = true
+    return
+
+fetchReadme = ->
+  readme = $ '#deploy-readme'
+  $.ajax(readme.attr 'data-src')
+  .success (res) ->
+    readme
+    .toggleClass 'hidden'
+    .html res
     return

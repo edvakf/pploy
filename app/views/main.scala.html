@@ -29,7 +29,9 @@
   }
 
   <div class="panel-body">
-    <div id="deploy-log" class="embed-responsive embed-responsive-16by9">
+    <div id="deploy-readme" data-src="@routes.Application.readme(currentProject.name)" class="hidden"></div>
+
+    <div id="deploy-log" class="hidden embed-responsive embed-responsive-16by9">
       <iframe name="deploy-log-frame" class="log-frame embed-responsive-item" src="about:blank"></iframe>
     </div>
 

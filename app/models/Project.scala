@@ -1,9 +1,12 @@
 package models
 
+import java.io.File
+
 import org.joda.time.DateTime
 import play.api.Logger
 import play.api.Play.current
 import play.api.i18n.{Messages, Lang}
+import scala.io.Source
 import scala.sys.process._
 
 case class Project(name: String) {
@@ -72,6 +75,16 @@ case class Project(name: String) {
       "DEPLOY_ENV" -> target,
       "DEPLOY_USER" -> user.name
     ) #| Process(Seq("tee", WorkingDir.logFile(name).toString))
+  }
+
+  def readme = {
+    val file = new File(repo.dir, ".deploy/config/readme.html")
+    if (!file.isFile) { None }
+    else {
+      val source = Source.fromFile(file)
+      try Some(source.mkString)
+      finally source.close()
+    }
   }
 
 }

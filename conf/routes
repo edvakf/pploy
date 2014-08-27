@@ -11,6 +11,7 @@ POST    /:project/checkout          controllers.Application.checkout(project)
 GET     /:project/commits           controllers.Application.commits(project)
 POST    /:project/deploy            controllers.Application.deploy(project)
 GET     /:project/logs              controllers.Application.logs(project)
+GET     /:project/readme            controllers.Application.readme(project)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
