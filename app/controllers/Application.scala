@@ -45,6 +45,12 @@ object Application extends Controller {
     Ok(views.html.project(proj, user))
   }
 
+  def lockUser(project: String) = Action { implicit request =>
+    val proj = Project(project)
+    if (proj.isLocked) Ok(proj.lock.user.name)
+    else Ok("")
+  }
+
   val lockOperationForm = Form(tuple( "user" -> nonEmptyText, "operation" -> text ))
 
   def lock(project: String) = Action { implicit request =>
