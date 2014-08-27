@@ -7,15 +7,20 @@
 <form class="sidebar-section box" action="/@currentProject.name/lock" method="POST">
   @CSRF.formField
   @if(currentProject.isLocked) {
+    <p>
+      @Messages("sidebar.lock.user")
+      <span class="label label-default">@currentProject.lock.user.name</span>
+    </p>
+    <p>
+      @Messages("sidebar.lock.time_left")
+      <span class="label label-danger time-left" data-seconds="@currentProject.lock.secondsLeft">
+        @currentProject.lock.minutesAndSecondsLeft
+      </span>
+    </p>
     @if(currentProject.isLockedBy(currentUserOption)) {
-      @Messages("sidebar.lock.myself")
-      <p class="time-left" data-seconds="@currentProject.lock.secondsLeft">@currentProject.lock.minutesAndSecondsLeft</p>
-      <button class="btn btn-success btn-block" name="operation" value="release">@Messages("sidebar.lock.release")</button>
       <button class="btn btn-warning btn-block" name="operation" value="extend">@Messages("sidebar.lock.extend", 10)</button>
+      <button class="btn btn-success btn-block" name="operation" value="release">@Messages("sidebar.lock.release")</button>
       <input type="hidden" name="user" value="@currentProject.lock.user.name">
-    } else {
-      @Messages("sidebar.lock.user", currentProject.lock.user.name)
-      <p class="time-left" data-seconds="@currentProject.lock.secondsLeft">@currentProject.lock.minutesAndSecondsLeft</p>
     }
   } else {
     <select class="form-control" name="user">
