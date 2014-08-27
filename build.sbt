@@ -1,8 +1,9 @@
 name := """pploy"""
 
-version := "1.0-SNAPSHOT"
+version := "0.1.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
+  .dependsOn(uri("https://github.com/gre/playCLI.git#c18217dd1e86f510a651476264781975d90cfabe"))
 
 scalaVersion := "2.11.1"
 
