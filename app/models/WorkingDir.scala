@@ -1,6 +1,7 @@
 package models
 
-import java.nio.file.{Files, Paths, Path}
+import java.io.File
+
 import play.api.Logger
 
 import scala.collection.JavaConversions._
@@ -13,30 +14,30 @@ object WorkingDir {
     dirname_
   }
 
-  lazy val projectsDir = Paths.get(dirname_, "projects")
-  lazy val logsDir = Paths.get(dirname_, "logs")
+  lazy val projectsDir = new File(dirname_, "projects")
+  lazy val logsDir = new File(dirname_, "logs")
 
-  def projectDir(project: String) = projectsDir.resolve(project)
-  def logFile(project: String) = logsDir.resolve(project + ".log")
+  def projectDir(project: String) = new File(projectsDir, project)
+  def logFile(project: String) = new File(logsDir, project + ".log")
 
   def setup(dirname: String) = {
     dirname_ = dirname
-    mkdir(Paths.get(dirname))
+    mkdir(new File(dirname))
     mkdir(projectsDir)
     mkdir(logsDir)
   }
 
-  private def mkdir(path: Path): Unit = {
-    if (!Files.exists(path)) {
-      Logger.info("making directory: " + path.toString)
-      Files.createDirectory(path)
-    } else if (!Files.isDirectory(path)) {
+  private def mkdir(dir: File): Unit = {
+    if (!dir.exists()) {
+      Logger.info("making directory: " + dir.toString)
+      dir.mkdirs()
+    } else if (!dir.isDirectory) {
       throw new RuntimeException("working directory is taken!")
     }
   }
 
   def projects = {
     // FIXME: handle irregular files in projects dir
-    Files.newDirectoryStream(projectsDir).map(_.getFileName.toString)
+    projectsDir.listFiles().map { _.getName }.sorted
   }
 }

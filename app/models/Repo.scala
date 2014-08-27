@@ -1,6 +1,5 @@
 package models
 
-import java.io.File
 import org.eclipse.jgit.api.ResetCommand.ResetType
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.transport.URIish
@@ -8,7 +7,7 @@ import play.api.Logger
 import scala.collection.JavaConversions._
 
 case class Repo(name: String) {
-  lazy val dir = new File(WorkingDir.projectDir(name).toString)
+  lazy val dir = WorkingDir.projectDir(name)
   lazy val git = Git.open(dir)
 
   def checkout(ref: String): Unit = {
