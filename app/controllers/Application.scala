@@ -45,36 +45,31 @@ object Application extends Controller {
     Ok(views.html.project(proj, user))
   }
 
-  val lockOperationForm = Form(tuple( "user" -> text, "operation" -> text ))
-  class UserNameDefaultOption extends RuntimeException
+  val lockOperationForm = Form(tuple( "user" -> nonEmptyText, "operation" -> text ))
 
   def lock(project: String) = Action { implicit request =>
     val proj = Project(project)
-    var result = Redirect("/"+proj.name)
 
-    try {
-      val (userName, operation) = lockOperationForm.bindFromRequest.get
-      if (userName == "") throw new UserNameDefaultOption
+    lockOperationForm.bindFromRequest.fold(
+      errors => Redirect("/"+proj.name),
+      f => {
+        val (userName, operation) = f
+        val user = User(userName)
 
-      val user = User(userName)
-      result = result.withCookies(Cookie("user", userName, Some(3600*24*7)))
-
-      operation match {
-        case "gain" => proj.gainLock(user)
-        case "release" => proj.releaseLock(user)
-        case "extend" => proj.extendLock(user)
-        case _ =>
-          throw new RuntimeException("operation not specified")
+        operation match {
+          case "gain" => proj.gainLock(user)
+          case "release" => proj.releaseLock(user)
+          case "extend" => proj.extendLock(user)
+          case _ =>
+            throw new RuntimeException("operation not specified")
+        }
+        Redirect("/"+proj.name)
+          .withCookies(Cookie("user", userName, Some(3600*24*7)))
       }
-      result
-
-    } catch {
-      case e: UserNameDefaultOption => result
-      case e: LockStatusException => result.flashing("message" -> e.getMessage)
-    }
+    )
   }
 
-  val checkoutForm = Form( "ref" -> text )
+  val checkoutForm = Form( "ref" -> nonEmptyText )
 
   def checkout(project: String) = Action { implicit request =>
     val proj = Project(project)
@@ -84,14 +79,13 @@ object Application extends Controller {
     }
     proj.assertLockedByUser(user)
 
-    val ref = checkoutForm.bindFromRequest.get
-
-    try {
-      proj.checkout(ref)
-      Redirect("/" + proj.name)
-    } catch { case e: Exception =>
-      Redirect("/" + proj.name).flashing("message" -> e.getMessage)
-    }
+    checkoutForm.bindFromRequest.fold(
+      errors => BadRequest,
+      ref => {
+        proj.checkout(ref)
+        Redirect("/" + proj.name)
+      }
+    )
   }
 
   val deployForm = Form( "target" -> text )
@@ -104,10 +98,13 @@ object Application extends Controller {
     }
     proj.assertLockedByUser(user)
 
-    val target = checkoutForm.bindFromRequest.get
-
-    Ok.chunked(CLI.enumerate(proj.execDeploy(user, target)))
-      .withHeaders("Content-Type" -> "text/plain")
+    deployForm.bindFromRequest.fold(
+      errors => BadRequest,
+      target => {
+        Ok.chunked(CLI.enumerate(proj.execDeploy(user, target)))
+          .withHeaders("Content-Type" -> "text/plain")
+      }
+    )
   }
 
   def commits(project: String) = Action { implicit request =>
