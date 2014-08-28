@@ -128,12 +128,4 @@ object Application extends Controller {
       NotFound
     }
   }
-
-  def readme(project: String) = Action { implicit request =>
-    val proj = Project(project)
-    proj.readme match {
-      case Some(html) => Ok(html)
-      case None => NotFound
-    }
-  }
 }

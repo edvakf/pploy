@@ -1,5 +1,4 @@
 $ ->
-  fetchReadme()
   countDown()
   checkLocked()
 
@@ -23,16 +22,6 @@ iframeFollowScroll = (frame) ->
 
   frame.on 'load', ->
     flag = true
-    return
-  return
-
-fetchReadme = ->
-  readme = $ '#deploy-readme'
-  $.ajax(readme.attr 'data-src')
-  .success (res) ->
-    readme
-    .toggleClass 'hidden'
-    .html res
     return
   return
 
