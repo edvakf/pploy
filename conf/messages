@@ -1,5 +1,8 @@
 welcome=Welcome to pploy
 welcome.click_sidebar=Click on a project in the sidebar.
+welcome.add_project=Add a project
+welcome.remove_project=Remove a project
+welcome.remove_project_confirmation=Are you sure to remove {0}?
 main.recent_commits=Recent Commits
 main.checkout=Checkout
 main.deploy.production=Deploy to production

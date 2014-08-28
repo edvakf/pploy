@@ -40,4 +40,19 @@ object WorkingDir {
     // FIXME: handle irregular files in projects dir
     projectsDir.listFiles().map { _.getName }.sorted
   }
+
+  def removeProjectFiles(project: String) = {
+    delete(projectDir(project))
+    delete(logFile(project))
+  }
+
+  private def delete(f: File): Unit = {
+    if (f.exists) {
+      if (f.isDirectory) {
+        f.listFiles.map(delete)
+      }
+      if (!f.delete())
+        throw new RuntimeException("Failed to delete file: " + f)
+    }
+  }
 }

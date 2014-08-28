@@ -128,4 +128,9 @@ object Application extends Controller {
       NotFound
     }
   }
+
+  def remove(project: String) = Action { implicit request =>
+    Project(project).remove()
+    Redirect("/")
+  }
 }

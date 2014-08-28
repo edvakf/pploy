@@ -1,6 +1,8 @@
 welcome=pployへようこそ
 welcome.click_sidebar=サイドバーのプロジェクト名をクリックしてください
 welcome.add_project=プロジェクトを追加する
+welcome.remove_project=プロジェクトを削除する
+welcome.remove_project_confirmation=プロジェクト"{0}"を本当に削除しますか?
 main.recent_commits=最近のコミット
 main.checkout=チェックアウト
 main.deploy.production=本番にデプロイ

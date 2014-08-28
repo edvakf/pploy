@@ -87,6 +87,9 @@ case class Project(name: String) {
     }
   }
 
+  def remove() = {
+    WorkingDir.removeProjectFiles(this.name)
+  }
 }
 
 object Project {

@@ -17,3 +17,21 @@
     </span>
   </div>
 </form>
+
+@if(!Project.allNames.isEmpty) {
+  <h3>@Messages("welcome.remove_project")</h3>
+
+  <table class="table table-striped">
+    @Project.allNames.map { name =>
+      <tr>
+        <td>
+          <form action="/@name/remove" method="post" class="form-inline">
+            <button class="btn btn-xs btn-danger confirm" data-confirm-text="@Messages("welcome.remove_project_confirmation", name)"><i class="glyphicon glyphicon-trash"></i></button>
+            @CSRF.formField
+            @name
+          </form>
+        </td>
+      </tr>
+    }
+  </table>
+}
