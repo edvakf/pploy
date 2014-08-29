@@ -37,18 +37,16 @@ countDown = ->
   setInterval ->
     seconds--
     location.reload() if seconds <= 0
-    elem.text secondsToString(seconds)
+    elem.html secondsToString(seconds)
     return
   , 1000
   return
 
 pad02 = (num) ->
   ('0' + num).substr(-2)
-  return
 
 secondsToString = (seconds) ->
   pad02(Math.floor(seconds/60)) + ':' + pad02(Math.floor(seconds%60))
-  return
 
 checkLocked = ->
   elem = $('[name="operation"][value="gain"]')
