@@ -30,12 +30,8 @@ object Application extends Controller {
 
   def create() = Action { implicit request =>
     val url = createProjectForm.bindFromRequest.get
-    try {
-      val proj = Project(Repo.clone(url))
-      Redirect("/" + proj.name)
-    } catch { case e: Exception =>
-      Redirect("/").flashing("message" -> e.getMessage)
-    }
+    val proj = Project(Repo.clone(url))
+    Redirect("/" + proj.name)
   }
 
   def project(project: String) = Action { implicit request =>
