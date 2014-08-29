@@ -5,12 +5,11 @@ $ ->
   $ '.confirm'
   .on 'click', ->
     return confirm $(this).attr('data-confirm-text')
-  return
 
   $ '#deploy-form'
   .on 'submit', (ev) ->
     $ '#deploy-log'
-    .toggleClass 'hidden'
+    .removeClass 'hidden'
     iframeFollowScroll($ '#deploy-log iframe')
     return
   return
