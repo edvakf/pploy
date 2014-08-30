@@ -103,7 +103,7 @@ object Application extends Controller {
     deployForm.bindFromRequest.fold(
       errors => BadRequest,
       target => {
-        Ok.chunked(CLI.enumerate(proj.execDeploy(user, target)))
+        Ok.chunked(CLI.enumerate(proj.execDeploy(user, target), chunkSize = 256))
           .withHeaders("Content-Type" -> "text/plain")
       }
     )
