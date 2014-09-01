@@ -57,7 +57,6 @@ object Application extends Controller {
       f => {
         val (userName, operation) = f
         val user = User(userName)
-
         operation match {
           case "gain" => proj.gainLock(user)
           case "release" => proj.releaseLock(user)

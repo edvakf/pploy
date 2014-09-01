@@ -45,6 +45,7 @@ case class Project(name: String) {
       case _ =>
         throw new LockStatusException(this, user)
     }
+    Hook.lockGained(name, user.name)
   }
 
   def extendLock(user: User) = {
@@ -54,6 +55,7 @@ case class Project(name: String) {
       case _ =>
         throw new LockStatusException(this, user)
     }
+    Hook.lockExtended(name, user.name)
   }
 
   def releaseLock(user: User) = {
@@ -63,12 +65,15 @@ case class Project(name: String) {
       case _ =>
         throw new LockStatusException(this, user)
     }
+    Hook.lockReleased(name, user.name)
   }
 
   def checkout(ref: String) = repo.checkout(ref)
 
   def execDeploy(user: User, target: String): ProcessBuilder = {
     Logger.info("bash -c '.deploy/bin/deploy 2>&1'")
+    if (target == "production") Hook.deployed(name, user.name)
+
     Process(
       Seq("bash", "-c", ".deploy/bin/deploy 2>&1"),
       repo.dir,

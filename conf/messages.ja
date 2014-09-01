@@ -17,3 +17,7 @@ sidebar.lock.gain=デプロイを開始する
 sidebar.lock.time_left=残り時間
 lock.operation.expired=デプロイ時間切れです
 lock.operation.taken=他の人がデプロイ中です
+hook.lock.gained=<span class="label">{0}</span> <img class="emoji" title=":computer:" alt=":computer:" src="/images/emoji/computer.png" height="20" width="20" align="absmiddle"> {1}さんがデプロイ中になりました
+hook.lock.released=<span class="label">{0}</span> <img class="emoji" title=":end:" alt=":end:" src="/images/emoji/end.png" height="20" width="20" align="absmiddle"> {1}さんがデプロイを終了しました
+hook.lock.extended=<span class="label">{0}</span> <img class="emoji" title=":coffee:" alt=":coffee:" src="/images/emoji/coffee.png" height="20" width="20" align="absmiddle"> {1}さんがデプロイを延長しました
+hook.deployed=<span class="label">{0}</span> <img class="emoji" title=":rocket:" alt=":rocket:" src="/images/emoji/rocket.png" height="20" width="20" align="absmiddle"> {1}さんが本番にデプロイしました
