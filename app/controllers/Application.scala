@@ -103,7 +103,7 @@ object Application extends Controller {
       errors => BadRequest,
       target => {
         Ok.chunked(CLI.enumerate(proj.execDeploy(user, target), chunkSize = 256))
-          .withHeaders("Content-Type" -> "text/plain")
+          .withHeaders("Content-Type" -> "text/plain", "X-Content-Type-Options" -> "nosniff")
       }
     )
   }
@@ -119,6 +119,7 @@ object Application extends Controller {
     if (file.isFile) {
       HTML
       Ok.sendFile(content = file, inline = true)
+        .withHeaders("Content-Type" -> "text/plain", "X-Content-Type-Options" -> "nosniff")
     } else {
       NotFound
     }
