@@ -1,35 +1,33 @@
 package models
 
-import org.eclipse.jgit.api.ResetCommand.ResetType
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.transport.URIish
 import play.api.Logger
 import scala.collection.JavaConversions._
+import scala.sys.process.{ProcessLogger, Process}
 
 case class Repo(name: String) {
   lazy val dir = WorkingDir.projectDir(name)
   lazy val git = Git.open(dir)
 
+  private def gitProc(args: String*) = {
+    Logger.info("git " + args.mkString(" "))
+    Process("git" +: args, dir)
+  }
+
   def checkout(ref: String): Unit = {
-    Logger.info("git fetch --prune")
-    git.fetch.setRemoveDeletedRefs(true).call()
+    val proc =
+      gitProc("fetch", "--prune") #&&
+      gitProc("reset", "--hard", ref) #&&
+      gitProc("clean", "-fdx") #&&
+      gitProc("submodule", "sync") #&&
+      gitProc("submodule", "init") #&&
+      gitProc("submodule", "update", "--recursive") run ProcessLogger(
+        line => { Logger.info("stdout: " + line) },
+        line => { Logger.info("stderr: " + line) }
+      )
 
-    Logger.info("git reset --hard " + ref)
-    git.reset.setMode(ResetType.HARD).setRef(ref).call()
-
-    Logger.info("git clean -fdx")
-    git.clean.setCleanDirectories(true).call()
-
-    Logger.info("git submodule sync")
-    git.submoduleSync.call()
-
-    Logger.info("git submodule init")
-    git.submoduleInit.call()
-
-    // --recursive is probably handled by default
-    // http://www.codeaffine.com/2014/04/16/how-to-manage-git-submodules-with-jgit/
-    Logger.info("git submodule update --recursive")
-    git.submoduleUpdate.call()
+     if (proc.exitValue() != 0) throw new RuntimeException("checkout failed")
   }
 
   def commits = {
@@ -41,9 +39,7 @@ case class Repo(name: String) {
 object Repo {
   def clone(url: String): Repo = {
     val uriish = new URIish(url)
-    val repo = Repo(uriish.getHumanishName)
-    Logger.info(f"cloning $url to ${repo.dir.toString}")
-    Git.cloneRepository.setURI(url).setDirectory(repo.dir).call()
-    repo
+    Process(Seq("git", "clone", url), WorkingDir.projectsDir).!
+    Repo(uriish.getHumanishName)
   }
 }
