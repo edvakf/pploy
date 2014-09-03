@@ -30,7 +30,7 @@
 
   <div class="panel-body">
     @currentProject.readme.map { readme =>
-      <pre>@readme</pre>
+      <div>@Html(readme)</div>
     }
 
     <div id="deploy-log" class="hidden embed-responsive embed-responsive-16by9">
