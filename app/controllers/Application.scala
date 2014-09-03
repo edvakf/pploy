@@ -16,11 +16,6 @@ object Application extends Controller {
       cookie => User(cookie.value)
     }
   }
-  def getSinglePostParam(request: Request[AnyContent], param: String) = {
-    request.body.asFormUrlEncoded
-      .flatMap { _.get(param) }
-      .flatMap { _.headOption }
-  }
 
   val createProjectForm = Form( "url" -> text )
 
