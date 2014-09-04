@@ -112,7 +112,6 @@ object Application extends Controller {
     val proj = Project(project)
     val file = new File(WorkingDir.logFile(proj.name).toString)
     if (file.isFile) {
-      HTML
       Ok.sendFile(content = file, inline = true)
         .withHeaders("Content-Type" -> "text/plain", "X-Content-Type-Options" -> "nosniff")
     } else {
