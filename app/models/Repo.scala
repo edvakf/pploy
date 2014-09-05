@@ -17,7 +17,7 @@ case class Repo(name: String) {
   }
 
   def checkout(ref: String): Unit = {
-    val proc = gitProc("fetch", "--prune") #&&
+    var proc = gitProc("fetch", "--prune") #&&
       gitProc("reset", "--hard", ref) #&&
       gitProc("clean", "-fdx") #&&
       gitProc("submodule", "sync") #&&
@@ -28,7 +28,7 @@ case class Repo(name: String) {
     val file = new File(dir, ".deploy/bin/hook_checkout")
     if (file.isFile) {
       Logger.info(".deploy/bin/hook_checkout 2>&1")
-      proc #&& Process(Seq("bash", "-c", file.getName + " 2>&1"), dir)
+      proc = proc #&& Process(Seq("bash", "-c", file.getName + " 2>&1"), dir)
     }
 
     val result = proc.run(ProcessLogger(
