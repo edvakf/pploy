@@ -21,7 +21,11 @@ case class Repo(name: String) {
     val file = new File(dir, ".deploy/bin/checkout_overwrite")
 
     val proc = if (file.isFile) {
-      Process(Seq("bash", "-c", file.getCanonicalPath + " 2>&1"), dir)
+      Process(
+        Seq("bash", "-c", file.getCanonicalPath + " 2>&1"),
+        dir,
+        "DEPLOY_COMMIT" -> ref
+      )
     } else {
       gitProc("fetch", "--prune") #&&
         gitProc("reset", "--hard", ref) #&&
