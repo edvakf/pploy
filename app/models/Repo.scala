@@ -1,5 +1,6 @@
 package models
 
+import java.io.File
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.transport.URIish
 import play.api.Logger
@@ -16,18 +17,26 @@ case class Repo(name: String) {
   }
 
   def checkout(ref: String): Unit = {
-    val proc =
-      gitProc("fetch", "--prune") #&&
+    val proc = gitProc("fetch", "--prune") #&&
       gitProc("reset", "--hard", ref) #&&
       gitProc("clean", "-fdx") #&&
       gitProc("submodule", "sync") #&&
       gitProc("submodule", "init") #&&
-      gitProc("submodule", "update", "--recursive") run ProcessLogger(
-        line => { Logger.info("stdout: " + line) },
-        line => { Logger.info("stderr: " + line) }
-      )
+      gitProc("submodule", "update", "--recursive")
 
-     if (proc.exitValue() != 0) throw new RuntimeException("checkout failed")
+    // チェックアウトフックスクリプトがあれば実行する
+    val file = new File(dir, ".deploy/bin/hook_checkout")
+    if (file.isFile) {
+      Logger.info(".deploy/bin/hook_checkout 2>&1")
+      proc #&& Process(Seq("bash", "-c", file.getName + " 2>&1"), dir)
+    }
+
+    val result = proc.run(ProcessLogger(
+      line => { Logger.info("stdout: " + line) },
+      line => { Logger.info("stderr: " + line) }
+    ))
+
+    if (result.exitValue() != 0) throw new RuntimeException("checkout failed")
   }
 
   def commits = {
