@@ -17,18 +17,18 @@ case class Repo(name: String) {
   }
 
   def checkout(ref: String): Unit = {
-    var proc = gitProc("fetch", "--prune") #&&
-      gitProc("reset", "--hard", ref) #&&
-      gitProc("clean", "-fdx") #&&
-      gitProc("submodule", "sync") #&&
-      gitProc("submodule", "init") #&&
-      gitProc("submodule", "update", "--recursive")
+    // if checkout_overwrite script exists
+    val file = new File(dir, ".deploy/bin/checkout_overwrite")
 
-    // チェックアウトフックスクリプトがあれば実行する
-    val file = new File(dir, ".deploy/bin/hook_checkout")
-    if (file.isFile) {
-      Logger.info(file.getCanonicalPath)
-      proc = proc #&& Process(Seq("bash", "-c", file.getCanonicalPath + " 2>&1"), dir)
+    val proc = if (file.isFile) {
+      Process(Seq("bash", "-c", file.getCanonicalPath + " 2>&1"), dir)
+    } else {
+      gitProc("fetch", "--prune") #&&
+        gitProc("reset", "--hard", ref) #&&
+        gitProc("clean", "-fdx") #&&
+        gitProc("submodule", "sync") #&&
+        gitProc("submodule", "init") #&&
+        gitProc("submodule", "update", "--recursive")
     }
 
     val result = proc.run(ProcessLogger(
