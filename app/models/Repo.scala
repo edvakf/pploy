@@ -27,8 +27,8 @@ case class Repo(name: String) {
     // チェックアウトフックスクリプトがあれば実行する
     val file = new File(dir, ".deploy/bin/hook_checkout")
     if (file.isFile) {
-      Logger.info(".deploy/bin/hook_checkout 2>&1")
-      proc = proc #&& Process(Seq("bash", "-c", file.getName + " 2>&1"), dir)
+      Logger.info(file.getCanonicalPath)
+      proc = proc #&& Process(Seq("bash", "-c", file.getCanonicalPath + " 2>&1"), dir)
     }
 
     val result = proc.run(ProcessLogger(
