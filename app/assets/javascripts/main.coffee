@@ -1,18 +1,11 @@
 $ ->
   countDown()
   checkLocked()
+  commandForm()
 
   $ '.confirm'
   .on 'click', ->
     return confirm $(this).attr('data-confirm-text')
-
-  $ '.command-form'
-  .on 'submit', (ev) ->
-    $ '#command-log'
-    .removeClass 'hidden'
-    iframeFollowScroll($ '#command-log iframe')
-    return
-  return
 
 iframeFollowScroll = (frame) ->
   flag = false
@@ -57,4 +50,21 @@ checkLocked = ->
       return
     return
   , 10000
+  return
+
+commandForm = ->
+  $ '.command-form'
+  .on 'submit', (ev) ->
+    $ '#command-log'
+    .removeClass 'hidden'
+
+    commandLog = $ '#command-log iframe'
+    iframeFollowScroll(commandLog)
+
+    commitLog = $ '#commit-log iframe'
+    commandLog.on 'load', onload = ->
+      commandLog.off 'load', onload
+      commitLog.attr 'src', commitLog.attr 'src'
+      return
+    return
   return

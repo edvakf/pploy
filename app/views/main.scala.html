@@ -38,7 +38,7 @@
     </div>
 
     <h3>@Messages("main.recent_commits")</h3>
-    <div class="embed-responsive embed-responsive-16by9">
+    <div id="commit-log" class="embed-responsive embed-responsive-16by9">
       <iframe class="log-frame embed-responsive-item" src="@routes.Application.commits(currentProject.name)"></iframe>
     </div>
 
