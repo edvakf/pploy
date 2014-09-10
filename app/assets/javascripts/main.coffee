@@ -6,11 +6,11 @@ $ ->
   .on 'click', ->
     return confirm $(this).attr('data-confirm-text')
 
-  $ '#deploy-form'
+  $ '.command-form'
   .on 'submit', (ev) ->
-    $ '#deploy-log'
+    $ '#command-log'
     .removeClass 'hidden'
-    iframeFollowScroll($ '#deploy-log iframe')
+    iframeFollowScroll($ '#command-log iframe')
     return
   return
 

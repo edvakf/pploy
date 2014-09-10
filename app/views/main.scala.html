@@ -12,12 +12,12 @@
   @if(currentProject.isLockedBy(currentUserOption)) {
     <div class="well">
       <h4>@Messages("main.checkout")</h4>
-      <form action="/@currentProject.name/checkout" method="post" class="form-inline">
+      <form action="/@currentProject.name/checkout" method="post" class="form-inline command-form" target="command-log-frame">
         @CSRF.formField
         <input type="text" class="form-control" name="ref" value="origin/master" required>
         <button class="btn btn-success">@Messages("main.checkout")</button>
       </form>
-      <form action="/@currentProject.name/deploy" method="post" target="deploy-log-frame" id="deploy-form">
+      <form action="/@currentProject.name/deploy" method="post" class="command-form" target="command-log-frame">
         @CSRF.formField
         <h4>@Messages("main.deploy.staging")</h4>
         <button class="btn btn-success" name="target" value="staging">@Messages("main.deploy.staging")</button>
@@ -33,8 +33,8 @@
       <div>@Html(readme)</div>
     }
 
-    <div id="deploy-log" class="hidden embed-responsive embed-responsive-16by9">
-      <iframe name="deploy-log-frame" class="log-frame embed-responsive-item" src="about:blank"></iframe>
+    <div id="command-log" class="hidden embed-responsive embed-responsive-16by9">
+      <iframe name="command-log-frame" class="log-frame embed-responsive-item" src="about:blank"></iframe>
     </div>
 
     <h3>@Messages("main.recent_commits")</h3>
