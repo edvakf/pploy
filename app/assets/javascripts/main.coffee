@@ -8,17 +8,17 @@ $ ->
     return confirm $(this).attr('data-confirm-text')
 
 iframeFollowScroll = (frame) ->
-  flag = false
+  frame.addClass('loading')
 
   timer = setInterval ->
     contents = frame.contents()
     contents.scrollTop contents.height()
-    clearTimeout(timer) if flag
+    clearTimeout(timer) if not frame.hasClass('loading')
     return
   , 100
 
   frame.on 'load', ->
-    flag = true
+    frame.removeClass('loading')
     return
   return
 
