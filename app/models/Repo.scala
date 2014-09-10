@@ -16,31 +16,22 @@ case class Repo(name: String) {
     Process("git" +: args, dir)
   }
 
-  def checkout(ref: String): Unit = {
+  def checkoutCommand: String = {
     // if checkout_overwrite script exists
     val file = new File(dir, ".deploy/bin/checkout_overwrite")
 
-    val proc = if (file.isFile) {
-      Process(
-        Seq("bash", "-c", file.getCanonicalPath + " 2>&1"),
-        dir,
-        "DEPLOY_COMMIT" -> ref
-      )
+    if (file.isFile) {
+      file.getCanonicalPath
     } else {
-      gitProc("fetch", "--prune") #&&
-        gitProc("reset", "--hard", ref) #&&
-        gitProc("clean", "-fdx") #&&
-        gitProc("submodule", "sync") #&&
-        gitProc("submodule", "init") #&&
-        gitProc("submodule", "update", "--recursive")
+      Seq(
+        "git fetch --prune",
+        "git reset --hard $DEPLOY_COMMIT",
+        "git clean -fdx",
+        "git submodule sync",
+        "git submodule init",
+        "git submodule update --recursive"
+      ).flatMap { Seq(_, "echo " + _) }.mkString(" && ")
     }
-
-    val result = proc.run(ProcessLogger(
-      line => { Logger.info("stdout: " + line) },
-      line => { Logger.info("stderr: " + line) }
-    ))
-
-    if (result.exitValue() != 0) throw new RuntimeException("checkout failed")
   }
 
   def commits = {

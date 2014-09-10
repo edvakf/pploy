@@ -78,8 +78,8 @@ object Application extends Controller {
     checkoutForm.bindFromRequest.fold(
       errors => BadRequest,
       ref => {
-        proj.checkout(ref)
-        Redirect("/" + proj.name)
+        Ok.chunked(CLI.enumerate(proj.checkout(ref)))
+          .withHeaders("Content-Type" -> "text/plain", "X-Content-Type-Options" -> "nosniff")
       }
     )
   }
