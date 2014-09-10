@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index()
-POST    /create                     controllers.Application.create()
+POST    /_/create                   controllers.Application.create()
 GET     /:project                   controllers.Application.project(project)
 GET     /:project/lock              controllers.Application.lockUser(project)
 POST    /:project/lock              controllers.Application.lock(project)

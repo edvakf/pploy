@@ -8,7 +8,7 @@
 
 <h3>@Messages("welcome.add_project")</h3>
 
-<form action="/create" method="post">
+<form action="/_/create" method="post">
   @CSRF.formField
   <div class="input-group">
     <input type="text" class="form-control" name="url" value="" placeholder="https://github.com/playframework/playframework.git" required>
