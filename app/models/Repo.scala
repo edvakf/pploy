@@ -30,7 +30,7 @@ case class Repo(name: String) {
         "git submodule sync",
         "git submodule init",
         "git submodule update --recursive"
-      ).flatMap { Seq(_, "echo " + _) }.mkString(" && ")
+      ).flatMap { c => Seq(c, "echo " + c) }.mkString(" && ")
     }
   }
 
