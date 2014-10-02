@@ -12,12 +12,12 @@
   @if(currentProject.isLockedBy(currentUserOption)) {
     <div class="well">
       <h4>@Messages("main.checkout")</h4>
-      <form action="/@currentProject.name/checkout" method="post" class="form-inline command-form" target="command-log-frame">
+      <form action="@routes.Application.checkout(currentProject.name)" method="post" class="form-inline command-form" target="command-log-frame">
         @CSRF.formField
         <input type="text" class="form-control" name="ref" value="origin/master" required>
         <button class="btn btn-success">@Messages("main.checkout")</button>
       </form>
-      <form action="/@currentProject.name/deploy" method="post" class="command-form" target="command-log-frame">
+      <form action="@routes.Application.deploy(currentProject.name)" method="post" class="command-form" target="command-log-frame">
         @CSRF.formField
         <h4>@Messages("main.deploy.staging")</h4>
         <button class="btn btn-success" name="target" value="staging">@Messages("main.deploy.staging")</button>

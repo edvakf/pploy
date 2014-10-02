@@ -8,7 +8,7 @@
 
 <h3>@Messages("welcome.add_project")</h3>
 
-<form action="/_/create" method="post">
+<form action="@routes.Application.create()" method="post">
   @CSRF.formField
   <div class="input-group">
     <input type="text" class="form-control" name="url" value="" placeholder="https://github.com/playframework/playframework.git" required>
@@ -25,7 +25,7 @@
     @Project.allNames.map { name =>
       <tr>
         <td>
-          <form action="/@name/remove" method="post" class="form-inline">
+          <form action="@routes.Application.remove(name)" method="post" class="form-inline">
             <button class="btn btn-xs btn-danger confirm" data-confirm-text="@Messages("welcome.remove_project_confirmation", name)"><i class="glyphicon glyphicon-trash"></i></button>
             @CSRF.formField
             @name

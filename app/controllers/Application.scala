@@ -26,7 +26,7 @@ object Application extends Controller {
   def create() = Action { implicit request =>
     val url = createProjectForm.bindFromRequest.get
     val proj = Project(Repo.clone(url))
-    Redirect("/" + proj.name)
+    Redirect(routes.Application.project(proj.name))
   }
 
   def project(project: String) = Action { implicit request =>
@@ -48,7 +48,7 @@ object Application extends Controller {
     val proj = Project(project)
 
     lockOperationForm.bindFromRequest.fold(
-      errors => Redirect("/"+proj.name),
+      errors => Redirect(routes.Application.project(proj.name)),
       f => {
         val (userName, operation) = f
         val user = User(userName)
@@ -59,7 +59,7 @@ object Application extends Controller {
           case _ =>
             throw new RuntimeException("operation not specified")
         }
-        Redirect("/"+proj.name)
+        Redirect(routes.Application.project(proj.name))
           .withCookies(Cookie("user", userName, Some(3600*24*7)))
       }
     )
@@ -121,6 +121,6 @@ object Application extends Controller {
 
   def remove(project: String) = Action { implicit request =>
     Project(project).remove()
-    Redirect("/")
+    Redirect(routes.Application.index())
   }
 }

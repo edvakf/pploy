@@ -23,7 +23,7 @@ object Global extends WithFilters(CSRFFilter()) with GlobalSettings {
   private def backUrl(request: RequestHeader) = {
     request.headers.get("referer") match {
       case Some(url) => new URL(url).getFile
-      case None => "/"
+      case None => controllers.routes.Application.index().toString()
     }
   }
 
