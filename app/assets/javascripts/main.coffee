@@ -41,12 +41,15 @@ secondsToString = (seconds) ->
   pad02(Math.floor(seconds/60)) + ':' + pad02(Math.floor(seconds%60))
 
 checkLocked = ->
-  elem = $('[name="operation"][value="gain"]')
+  elem = $('#lock-form')
   return if not elem.length
+  checkUrl = elem.attr('action')
+  lockUser = elem.attr('data-lock-user') or ""
   setInterval ->
-    $.ajax elem.closest('form').attr('action')
+    $.ajax checkUrl
     .success (res) ->
-      location.reload() if res is not ""
+      if lockUser isnt res
+        location.reload()
       return
     return
   , 10000

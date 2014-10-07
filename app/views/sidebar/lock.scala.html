@@ -4,7 +4,8 @@
 
 @(currentProject: Project, currentUserOption: Option[User])(implicit request: Request[AnyContent], lang: Lang)
 
-<form class="sidebar-section box" action="@routes.Application.lock(currentProject.name)" method="POST">
+<form class="sidebar-section box" action="@routes.Application.lock(currentProject.name)" method="POST"
+  id="lock-form" @if(currentProject.isLocked) { data-lock-user="@currentProject.lock.user.name" }>
   @CSRF.formField
   @if(currentProject.isLocked) {
     <p>
