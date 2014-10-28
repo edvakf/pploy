@@ -63,11 +63,26 @@ commandForm = ->
 
     commandLog = $ '#command-log iframe'
     iframeFollowScroll(commandLog)
+    disableAllButtonsUntilLoad(commandLog)
 
     commitLog = $ '#commit-log iframe'
     commandLog.on 'load', onload = ->
       commandLog.off 'load', onload
       commitLog.attr 'src', commitLog.attr 'src'
+      return
+    return
+  return
+
+disableAllButtonsUntilLoad = (f) ->
+  $buttons = $ 'button'
+
+  $buttons.each (i, e) ->
+    $(e).prop 'disabled', true
+    return
+
+  f.on 'load', ->
+    $buttons.each (i, e) ->
+      $(e).prop 'disabled', false
       return
     return
   return
