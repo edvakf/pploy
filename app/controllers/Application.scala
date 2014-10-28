@@ -79,7 +79,7 @@ object Application extends Controller {
       errors => BadRequest,
       ref => {
         Ok.chunked(CLI.enumerate(proj.checkout(ref)))
-          .withHeaders("Content-Type" -> "text/plain", "X-Content-Type-Options" -> "nosniff")
+          .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
       }
     )
   }
@@ -98,7 +98,7 @@ object Application extends Controller {
       errors => BadRequest,
       target => {
         Ok.chunked(CLI.enumerate(proj.execDeploy(user, target), chunkSize = 256))
-          .withHeaders("Content-Type" -> "text/plain", "X-Content-Type-Options" -> "nosniff")
+          .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
       }
     )
   }
@@ -113,7 +113,7 @@ object Application extends Controller {
     val file = new File(WorkingDir.logFile(proj.name).toString)
     if (file.isFile) {
       Ok.sendFile(content = file, inline = true)
-        .withHeaders("Content-Type" -> "text/plain", "X-Content-Type-Options" -> "nosniff")
+        .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
     } else {
       NotFound
     }
