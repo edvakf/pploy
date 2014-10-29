@@ -63,7 +63,7 @@ commandForm = ->
 
     commandLog = $ '#command-log iframe'
     iframeFollowScroll(commandLog)
-    disableAllButtonsUntilLoad(commandLog)
+    #disableAllButtonsUntilLoad(commandLog)
 
     commitLog = $ '#commit-log iframe'
     commandLog.on 'load', onload = ->
