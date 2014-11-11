@@ -69,10 +69,8 @@ object Application extends Controller {
 
   def checkout(project: String) = Action { implicit request =>
     val proj = Project(project)
-    val user = getCurrentUser(request) match {
-      case None => throw new RuntimeException("user not selected")
-      case Some(u) => u
-    }
+    val user = getCurrentUser(request)
+      .getOrElse(throw new RuntimeException("user not selected"))
     proj.assertLockedByUser(user)
 
     checkoutForm.bindFromRequest.fold(
@@ -88,10 +86,8 @@ object Application extends Controller {
 
   def deploy(project: String) = Action { implicit request =>
     val proj = Project(project)
-    val user = getCurrentUser(request) match {
-      case None => throw new RuntimeException("user not selected")
-      case Some(u) => u
-    }
+    val user = getCurrentUser(request)
+      .getOrElse(throw new RuntimeException("user not selected"))
     proj.assertLockedByUser(user)
 
     deployForm.bindFromRequest.fold(
