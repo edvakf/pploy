@@ -1,11 +1,11 @@
 package models
 
-import java.io.File
+import java.io._
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.transport.URIish
 import play.api.Logger
 import scala.collection.JavaConversions._
-import scala.sys.process.{ProcessLogger, Process}
+import scala.sys.process.Process
 
 case class Repo(name: String) {
   lazy val dir = WorkingDir.projectDir(name)
@@ -16,21 +16,33 @@ case class Repo(name: String) {
     Process("git" +: args, dir)
   }
 
-  def checkoutCommand: String = {
-    // if checkout_overwrite script exists
-    val file = new File(dir, ".deploy/bin/checkout_overwrite")
+  lazy val defaultCheckoutCommand = {
+    val f = new File("/tmp/checkout.sh")
+    if (!f.isFile) {
+      val out = new PrintWriter(new BufferedWriter(new FileWriter(f)))
+      out.print(
+        """#!/bin/bash -eux
+          |git fetch --prune
+          |git reset --hard $DEPLOY_COMMIT
+          |git clean -fdx
+          |git submodule sync
+          |git submodule init
+          |git submodule update --recursive
+        """.stripMargin
+      )
+      out.close()
+      f.setExecutable(true)
+    }
+    f.getCanonicalPath
+  }
 
-    if (file.isFile) {
-      file.getCanonicalPath
+  lazy val checkoutCommand = {
+    val checkoutScript = ".deploy/bin/checkout_overwrite"
+    // if checkout_overwrite script exists
+    if (new File(dir, checkoutScript).isFile) {
+      checkoutScript
     } else {
-      Seq(
-        "git fetch --prune",
-        "git reset --hard $DEPLOY_COMMIT",
-        "git clean -fdx",
-        "git submodule sync",
-        "git submodule init",
-        "git submodule update --recursive"
-      ).flatMap { c => Seq(c, "echo " + c) }.mkString(" && ")
+      defaultCheckoutCommand
     }
   }
 

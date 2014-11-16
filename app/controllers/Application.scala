@@ -1,14 +1,10 @@
 package controllers
 
 import java.io.File
-
-import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import play.api.Play.current
 import models._
-import playcli.CLI
 
 object Application extends Controller {
   def getCurrentUser(request: Request[AnyContent]) = {
@@ -76,7 +72,7 @@ object Application extends Controller {
     checkoutForm.bindFromRequest.fold(
       errors => BadRequest,
       ref => {
-        Ok.chunked(CLI.enumerate(proj.checkout(ref)))
+        Ok.chunked(ProcessEnumerator(proj.checkoutProcess(ref)))
           .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
       }
     )
@@ -93,7 +89,7 @@ object Application extends Controller {
     deployForm.bindFromRequest.fold(
       errors => BadRequest,
       target => {
-        Ok.chunked(CLI.enumerate(proj.execDeploy(user, target), chunkSize = 256))
+        Ok.chunked(ProcessEnumerator(proj.deployProcess(user, target)))
           .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
       }
     )

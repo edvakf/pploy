@@ -69,21 +69,22 @@ case class Project(name: String) {
     Hook.lockReleased(name, user.name)
   }
 
-  def checkout(ref: String) = {
+  def checkoutProcess(ref: String) = {
     Logger.info(repo.checkoutCommand)
+
     Process(
-      Seq("bash", "-c", repo.checkoutCommand + " 2>&1"),
+      UnbufferedCommand(repo.checkoutCommand),
       repo.dir,
       "DEPLOY_COMMIT" -> ref
     )
   }
 
-  def execDeploy(user: User, target: String): ProcessBuilder = {
-    Logger.info("bash -c '.deploy/bin/deploy 2>&1'")
+  def deployProcess(user: User, target: String) = {
+    Logger.info(".deploy/bin/deploy")
     if (target == "production") Hook.deployed(name, user.name)
 
     Process(
-      Seq("bash", "-c", ".deploy/bin/deploy 2>&1"),
+      UnbufferedCommand(".deploy/bin/deploy"),
       repo.dir,
       "DEPLOY_ENV" -> target,
       "DEPLOY_USER" -> user.name
