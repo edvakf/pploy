@@ -1,13 +1,12 @@
 package models
 
-import java.io.File
 import java.nio.charset.CodingErrorAction
 
 import org.joda.time.DateTime
 import play.api.Logger
 import play.api.Play.current
 import play.api.i18n.{Messages, Lang}
-import scala.io.{Codec, Source}
+import scala.io.{Source, Codec}
 import scala.sys.process._
 
 case class Project(name: String) {
@@ -80,11 +79,11 @@ case class Project(name: String) {
   }
 
   def deployProcess(user: User, target: String) = {
-    Logger.info(".deploy/bin/deploy")
+    Logger.info(repo.deployCommand)
     if (target == "production") Hook.deployed(name, user.name)
 
     Process(
-      UnbufferedCommand(".deploy/bin/deploy"),
+      UnbufferedCommand(repo.deployCommand),
       repo.dir,
       "DEPLOY_ENV" -> target,
       "DEPLOY_USER" -> user.name
@@ -92,14 +91,12 @@ case class Project(name: String) {
   }
 
   def readme: Option[String] = {
-    val file = new File(repo.dir, ".deploy/config/readme.html")
-    if (!file.isFile) { None }
-    else {
+    repo.readmeFile map {file =>
       val codec = Codec.UTF8
       codec.onMalformedInput(CodingErrorAction.IGNORE)
 
       val source = Source.fromFile(file)(codec)
-      try Some(source.mkString)
+      try source.mkString
       finally source.close()
     }
   }

@@ -3,7 +3,6 @@ package models
 import java.io._
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.transport.URIish
-import play.api.Logger
 import scala.collection.JavaConversions._
 import scala.sys.process.Process
 
@@ -11,10 +10,12 @@ case class Repo(name: String) {
   lazy val dir = WorkingDir.projectDir(name)
   lazy val git = Git.open(dir)
 
-  private def gitProc(args: String*) = {
-    Logger.info("git " + args.mkString(" "))
-    Process("git" +: args, dir)
+  def readmeFile: Option[File] = {
+    val file = new File(dir, ".deploy/config/readme.html")
+    if (file.isFile) { Some(file) } else { None }
   }
+
+  val deployCommand = ".deploy/bin/deploy"
 
   lazy val defaultCheckoutCommand = {
     val f = new File("/tmp/checkout.sh")
