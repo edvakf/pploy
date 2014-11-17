@@ -5,8 +5,8 @@ import java.nio.charset.CodingErrorAction
 import org.joda.time.DateTime
 import play.api.Logger
 import play.api.Play.current
-import play.api.i18n.{Messages, Lang}
-import scala.io.{Source, Codec}
+import play.api.i18n.{ Messages, Lang }
+import scala.io.{ Source, Codec }
 import scala.sys.process._
 
 case class Project(name: String) {
@@ -91,7 +91,7 @@ case class Project(name: String) {
   }
 
   def readme: Option[String] = {
-    repo.readmeFile map {file =>
+    repo.readmeFile map { file =>
       val codec = Codec.UTF8
       codec.onMalformedInput(CodingErrorAction.IGNORE)
 
@@ -116,7 +116,7 @@ object Project {
 }
 
 class LockStatusException(message: String = null, cause: Throwable = null)
-  extends RuntimeException(message, cause) {
+    extends RuntimeException(message, cause) {
 
   def this(project: Project, user: User) = this(
     if (project.isLocked) "lock.operation.taken" else "lock.operation.expired"
