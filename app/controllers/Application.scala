@@ -13,7 +13,7 @@ object Application extends Controller {
     }
   }
 
-  val createProjectForm = Form( "url" -> text )
+  val createProjectForm = Form("url" -> text)
 
   def index() = Action { implicit request =>
     Ok(views.html.index())
@@ -38,7 +38,7 @@ object Application extends Controller {
     else Ok("")
   }
 
-  val lockOperationForm = Form(tuple( "user" -> nonEmptyText, "operation" -> text ))
+  val lockOperationForm = Form(tuple("user" -> nonEmptyText, "operation" -> text))
 
   def lock(project: String) = Action { implicit request =>
     val proj = Project(project)
@@ -56,12 +56,12 @@ object Application extends Controller {
             throw new RuntimeException("operation not specified")
         }
         Redirect(routes.Application.project(proj.name))
-          .withCookies(Cookie("user", userName, Some(3600*24*7)))
+          .withCookies(Cookie("user", userName, Some(3600 * 24 * 7)))
       }
     )
   }
 
-  val checkoutForm = Form( "ref" -> nonEmptyText )
+  val checkoutForm = Form("ref" -> nonEmptyText)
 
   def checkout(project: String) = Action { implicit request =>
     val proj = Project(project)
@@ -78,7 +78,7 @@ object Application extends Controller {
     )
   }
 
-  val deployForm = Form( "target" -> text )
+  val deployForm = Form("target" -> text)
 
   def deploy(project: String) = Action { implicit request =>
     val proj = Project(project)

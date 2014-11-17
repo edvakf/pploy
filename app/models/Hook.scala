@@ -1,7 +1,7 @@
 package models
 
 import play.api.Play._
-import play.api.i18n.{Lang, Messages}
+import play.api.i18n.{ Lang, Messages }
 
 object Hook {
   val idobata = current.configuration.getString("pploy.idobata.endpoint").map {

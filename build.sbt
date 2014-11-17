@@ -1,3 +1,5 @@
+scalariformSettings
+
 name := """pploy"""
 
 version := "0.4.0"

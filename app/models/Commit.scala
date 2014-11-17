@@ -3,7 +3,7 @@ package models
 import java.io.ByteArrayOutputStream
 
 import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.diff.{DiffEntry, DiffFormatter}
+import org.eclipse.jgit.diff.{ DiffEntry, DiffFormatter }
 import org.eclipse.jgit.revwalk.RevCommit
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -31,12 +31,13 @@ class Commit(private val git: Git, private val c: RevCommit) {
       df.setRepository(git.getRepository)
       df.scan(a, b).map { ent =>
         ent.getChangeType match {
-          case DiffEntry.ChangeType.ADD    => "A\t" + ent.getNewPath
+          case DiffEntry.ChangeType.ADD => "A\t" + ent.getNewPath
           case DiffEntry.ChangeType.DELETE => "D\t" + ent.getOldPath
           case DiffEntry.ChangeType.MODIFY => "M\t" + ent.getNewPath
-          case DiffEntry.ChangeType.COPY   => f"C${ent.getScore}%03d\t${ent.getOldPath}\t${ent.getNewPath}"
+          case DiffEntry.ChangeType.COPY => f"C${ent.getScore}%03d\t${ent.getOldPath}\t${ent.getNewPath}"
           case DiffEntry.ChangeType.RENAME => f"R${ent.getScore}%03d\t${ent.getOldPath}\t${ent.getNewPath}"
-        }}
+        }
+      }
         .mkString("\n")
     }
   }
