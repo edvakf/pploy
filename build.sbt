@@ -25,3 +25,5 @@ libraryDependencies += "org.eclipse.jgit" % "org.eclipse.jgit" % "[3.4,)"
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
 excludeFilter in (Assets, LessKeys.less) := "_*.less"
+
+scalacOptions ++= Seq("-Ywarn-unused")

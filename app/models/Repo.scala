@@ -11,11 +11,6 @@ case class Repo(name: String) {
   lazy val dir = WorkingDir.projectDir(name)
   lazy val git = Git.open(dir)
 
-  private def gitProc(args: String*) = {
-    Logger.info("git " + args.mkString(" "))
-    Process("git" +: args, dir)
-  }
-
   def checkoutCommand: String = {
     // if checkout_overwrite script exists
     val file = new File(dir, ".deploy/bin/checkout_overwrite")
