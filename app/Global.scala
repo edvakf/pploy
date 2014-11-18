@@ -14,10 +14,7 @@ object Global extends WithFilters(CSRFFilter()) with GlobalSettings {
   lazy val isDev = Play.isDev(current)
 
   override def onStart(app: Application) {
-    current.configuration.getString("pploy.dir") match {
-      case None => throw new RuntimeException("pploy.dir is not set")
-      case Some(dir) => WorkingDir.setup(dir)
-    }
+    WorkingDir.setup()
   }
 
   private def backUrl(request: RequestHeader) = {
