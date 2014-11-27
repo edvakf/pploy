@@ -1,7 +1,6 @@
 package models
 
 import java.io.{ BufferedReader, InputStreamReader, PipedOutputStream, PipedInputStream }
-import java.nio.charset.StandardCharsets
 import play.api.libs.iteratee.Enumerator
 import scala.sys.process._
 import scala.concurrent.Future
@@ -16,7 +15,7 @@ object ProcessEnumerator {
     val out = new PipedOutputStream(in)
     Future(process.#>(out).run())
 
-    val reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))
+    val reader = new BufferedReader(new InputStreamReader(in, "UTF-8"))
 
     // there is Enumerator.fromString which makes Enumerator[Array[Byte]]
     // but we prefer Enumerator[String] so that WebSocket uses TextFrame
