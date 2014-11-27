@@ -1,7 +1,9 @@
 $ ->
+  jsSetting()
   countDown()
   checkLocked()
   commandForm()
+  submitButtonHack()
 
   $ '.confirm'
   .on 'click', ->
@@ -16,10 +18,10 @@ iframeFollowScroll = (frame) ->
     clearTimeout(timer) if not frame.hasClass('loading')
     return
   , 100
+  return
 
-  frame.on 'load', ->
-    frame.removeClass('loading')
-    return
+iframeStopFollowingScroll = (frame) ->
+  frame.removeClass('loading')
   return
 
 countDown = ->
@@ -63,29 +65,83 @@ commandForm = ->
 
     commandLog = $ '#command-log iframe'
     iframeFollowScroll(commandLog)
-    disableAllButtonsUntilLoad(commandLog)
+    setTimeout disableAllButtons, 10
 
     commitLog = $ '#commit-log iframe'
-    commandLog.on 'load', onload = ->
-      commandLog.off 'load', onload
-      commitLog.attr 'src', commitLog.attr 'src'
-      return
+
+    if window.setting['use_web_socket']
+      postWebSocket this, commandLog, ->
+        iframeStopFollowingScroll(commandLog)
+        enableAllButtons()
+        return
+      ev.preventDefault()
+    else
+      commandLog.on 'load', onload = ->
+        commandLog.off 'load', onload
+        commitLog.attr 'src', commitLog.attr 'src'
+        iframeStopFollowingScroll(commandLog)
+        enableAllButtons()
+        return
+
     return
   return
 
-disableAllButtonsUntilLoad = (f) ->
-  setTimeout ->
-    $buttons = $ 'button'
+disableAllButtons = ->
+  $ 'button'
+  .each (i, e) ->
+    $(e).prop 'disabled', true
+    return
+  return
 
-    $buttons.each (i, e) ->
-      $(e).prop 'disabled', true
-      return
+enableAllButtons = ->
+  $ 'button'
+  .each (i, e) ->
+    $(e).prop 'disabled', false
+    return
+  return
 
-    f.on 'load', ->
-      $buttons.each (i, e) ->
-        $(e).prop 'disabled', false
+postWebSocket = (form, frame, oncomplete) ->
+  $(frame).contents().find('body').html('<pre></pre>')
+  pre = $(frame).contents().find('pre')
+
+  action = $(form).prop 'action'
+  query = $(form).serialize()
+  ws = new WebSocket action.replace(/^http(s)?:\/\//, "ws$1:") + '?' + query
+  ws.onopen = (event) ->
+    return
+  ws.onmessage = (event) ->
+    pre.append($('<span>').text(event.data))
+    return
+  ws.onerror = (event) ->
+    oncomplete()
+    return
+  ws.onclose = (event) ->
+    oncomplete()
+    return
+  return
+
+# for form.serialize()
+# http://stackoverflow.com/a/11271850
+submitButtonHack = ->
+  $('form :submit').on 'click', ->
+    if $(this).attr 'name'
+      $form = $(this).closest('form')
+      $hidden = $('<input type=hidden>').attr({
+        name: $(this).attr('name'),
+        value: $(this).attr('value')
+      })
+      $form.append($hidden)
+      setTimeout ->
+        $hidden.remove()
         return
-      return
+      , 10
+    return
+  return
 
+# pass Application settings to JavaScript via DOM elements with classname "js-setting"
+jsSetting = ->
+  window.setting = {}
+  $('.js-setting').each ->
+    window.setting[$(this).attr('data-name')] = $(this).attr('data-value')
     return
   return

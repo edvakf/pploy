@@ -1,10 +1,10 @@
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUserOption: Option[User])(implicit request: Request[AnyContent], lang: Lang, flash: Flash)
+@(currentProject: Project, currentUserOption: Option[User], useWebSocket: Boolean)(implicit request: Request[AnyContent], lang: Lang, flash: Flash)
 
 @layout{
-  @main(currentProject, currentUserOption)
+  @main(currentProject, currentUserOption, useWebSocket)
 }{
   @sidebar.lock(currentProject, currentUserOption)
   @sidebar.projects(Some(currentProject))

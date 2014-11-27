@@ -1,13 +1,15 @@
 package controllers
 
 import java.io.File
+import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.iteratee.Iteratee
 import play.api.mvc._
 import models._
 
 object Application extends Controller {
-  def getCurrentUser(request: Request[AnyContent]) = {
+  def getCurrentUser(request: RequestHeader) = {
     request.cookies.get("user").map {
       cookie => User(cookie.value)
     }
@@ -28,8 +30,9 @@ object Application extends Controller {
   def project(project: String) = Action { implicit request =>
     val proj = Project(project)
     val user = getCurrentUser(request)
+    val useWebSocket = current.configuration.getBoolean("pploy.preference.websocket").getOrElse(false)
 
-    Ok(views.html.project(proj, user))
+    Ok(views.html.project(proj, user, useWebSocket))
   }
 
   def lockUser(project: String) = Action { implicit request =>
@@ -78,6 +81,16 @@ object Application extends Controller {
     )
   }
 
+  def checkoutWS(project: String, ref: String) = WebSocket.using[String] { request =>
+    val proj = Project(project)
+    val user = getCurrentUser(request)
+      .getOrElse(throw new RuntimeException("user not selected"))
+
+    val in = Iteratee.ignore[String]
+    val out = ProcessEnumerator(proj.checkoutProcess(ref))
+    (in, out)
+  }
+
   val deployForm = Form("target" -> text)
 
   def deploy(project: String) = Action { implicit request =>
@@ -93,6 +106,16 @@ object Application extends Controller {
           .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
       }
     )
+  }
+
+  def deployWS(project: String, target: String) = WebSocket.using[String] { request =>
+    val proj = Project(project)
+    val user = getCurrentUser(request)
+      .getOrElse(throw new RuntimeException("user not selected"))
+
+    val in = Iteratee.ignore[String]
+    val out = ProcessEnumerator(proj.deployProcess(user, target))
+    (in, out)
   }
 
   def commits(project: String) = Action { implicit request =>
