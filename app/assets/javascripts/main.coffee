@@ -67,10 +67,9 @@ commandForm = ->
     iframeFollowScroll(commandLog)
     setTimeout disableAllButtons, 10
 
-    commitLog = $ '#commit-log iframe'
-
     if window.setting['use_web_socket']
       postWebSocket this, commandLog, ->
+        reloadCommitLog()
         iframeStopFollowingScroll(commandLog)
         enableAllButtons()
         return
@@ -78,12 +77,17 @@ commandForm = ->
     else
       commandLog.on 'load', onload = ->
         commandLog.off 'load', onload
-        commitLog.attr 'src', commitLog.attr 'src'
+        reloadCommitLog()
         iframeStopFollowingScroll(commandLog)
         enableAllButtons()
         return
 
     return
+  return
+
+reloadCommitLog = ->
+  commitLog = $ '#commit-log iframe'
+  commitLog.attr 'src', commitLog.attr 'src'
   return
 
 disableAllButtons = ->
