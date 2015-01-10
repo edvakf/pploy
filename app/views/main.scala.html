@@ -46,7 +46,7 @@
       <iframe class="log-frame embed-responsive-item" src="@routes.Application.commits(currentProject.name)"></iframe>
     </div>
 
-    <h3>@Messages("main.previous_log")</h3>
+    <h3>@Messages("main.previous_log") <a href="@routes.Application.logs(currentProject.name)" target="_blank" class="glyphicon glyphicon-hand-right"></a></h3>
     <div class="embed-responsive embed-responsive-16by9">
       <iframe class="log-frame embed-responsive-item" src="@routes.Application.logs(currentProject.name)"></iframe>
     </div>
