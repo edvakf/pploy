@@ -3,29 +3,26 @@ package models
 import java.io.File
 
 import play.api.Logger
-
+import play.api.Play.current
 import scala.collection.JavaConversions._
 
 object WorkingDir {
-  private var dirname_ : String = null
 
-  def dirname = {
-    if (dirname_ == null) throw new RuntimeException("setup is not called!")
-    dirname_
-  }
+  val dirname = current.configuration.getString("pploy.dir").getOrElse(sys.error("pploy.dir is not set"))
 
-  lazy val projectsDir = new File(dirname_, "projects")
-  lazy val logsDir = new File(dirname_, "logs")
+  val projectsDir = new File(dirname, "projects")
 
-  def projectDir(project: String) = new File(projectsDir, project)
-  def logFile(project: String) = new File(logsDir, project + ".log")
+  val logsDir = new File(dirname, "logs")
 
-  def setup(dirname: String) = {
-    dirname_ = dirname
+  def setup(): Unit = {
     mkdir(new File(dirname))
     mkdir(projectsDir)
     mkdir(logsDir)
   }
+
+  def projectDir(project: String) = new File(projectsDir, project)
+
+  def logFile(project: String) = new File(logsDir, project + ".log")
 
   private def mkdir(dir: File): Unit = {
     if (!dir.exists()) {
