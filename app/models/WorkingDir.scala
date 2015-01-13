@@ -8,7 +8,7 @@ import scala.collection.JavaConversions._
 
 object WorkingDir {
 
-  val dirname = current.configuration.getString("pploy.dir").getOrElse("pploy.dir is not set")
+  val dirname = current.configuration.getString("pploy.dir").getOrElse(sys.error("pploy.dir is not set"))
 
   val projectsDir = new File(dirname, "projects")
 
