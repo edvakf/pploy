@@ -28,3 +28,10 @@ libraryDependencies += "org.eclipse.jgit" % "org.eclipse.jgit" % "[3.4,)"
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
 excludeFilter in (Assets, LessKeys.less) := "_*.less"
+
+// http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
+import NativePackagerKeys._
+
+maintainer in Docker := "Atsushi Takayama <taka.atsushi@gmail.com>"
+
+dockerExposedPorts in Docker := Seq(9000, 9443)
