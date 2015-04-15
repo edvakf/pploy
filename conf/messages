@@ -17,7 +17,7 @@ sidebar.lock.gain=Start deploying
 sidebar.lock.time_left=Time left
 lock.operation.expired=Your lock is expired
 lock.operation.taken=Lock to this project is held by someone else
-hook.lock.gained=<span class="label">{0}</span> <img class="emoji" title=":computer:" alt=":computer:" src="/images/emoji/computer.png" height="20" width="20" align="absmiddle"> {1} has started a deploy session
-hook.lock.released=<span class="label">{0}</span> <img class="emoji" title=":end:" alt=":end:" src="/images/emoji/end.png" height="20" width="20" align="absmiddle"> {1} has finished a deploy session
-hook.lock.extended=<span class="label">{0}</span> <img class="emoji" title=":coffee:" alt=":coffee:" src="/images/emoji/coffee.png" height="20" width="20" align="absmiddle"> {1} has extended the deploy session
-hook.deployed=<span class="label">{0}</span> <img class="emoji" title=":rocket:" alt=":rocket:" src="/images/emoji/rocket.png" height="20" width="20" align="absmiddle"> {1} has deployed to production
+hook.lock.gained=[{0}] {1} has started a deploy session
+hook.lock.released=[{0}] {1} has finished a deploy session
+hook.lock.extended=[{0}] {1} has extended the deploy session
+hook.deployed=[{0}] {1} has deployed to production
