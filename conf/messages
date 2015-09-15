@@ -7,6 +7,7 @@ main.recent_commits=Recent Commits
 main.checkout=Checkout
 main.deploy.production=Deploy to production
 main.deploy.staging=Deploy to staging
+main.deploy.confirm=Are you sure?
 main.previous_log=Previous log
 sidebar.header.projects=Projects
 sidebar.user.noselect=Please Select

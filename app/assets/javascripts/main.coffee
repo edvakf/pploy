@@ -153,4 +153,5 @@ jsSetting = ->
 
 confirmSubmitButton = ->
   $('deploy-form').on 'submit', (event) ->
-    event.preventDefault() unless confirm('実行してよろしいですか')
+    message = $(event.currentTarget).data('confirm')
+    event.preventDefault() unless confirm(message)
