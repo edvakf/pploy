@@ -4,6 +4,7 @@ $ ->
   checkLocked()
   commandForm()
   submitButtonHack()
+  confirmSubmitButton()
 
   $ '.confirm'
   .on 'click', ->
@@ -149,3 +150,7 @@ jsSetting = ->
     window.setting[$(this).attr('data-name')] = $(this).attr('data-value')
     return
   return
+
+confirmSubmitButton = ->
+  $('deploy-form').on 'submit', (event) ->
+    event.preventDefault() unless confirm('実行してよろしいですか')
