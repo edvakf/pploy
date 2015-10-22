@@ -1,6 +1,7 @@
 language: scala
-scala:
-- 2.11.6
+scala: 2.11.6
+sudo: false
+jdk: oraclejdk8
 script: sbt dist
 deploy:
   provider: releases
