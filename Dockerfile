@@ -13,7 +13,7 @@
 # docker cp $NAME:/pploy/target/universal/pploy-1.0-SNAPSHOT.zip ./
 # docker rm -f $NAME || true
 
-FROM java:8-jdk
+FROM java:6-jdk
 
 COPY . /pploy
 WORKDIR /pploy
