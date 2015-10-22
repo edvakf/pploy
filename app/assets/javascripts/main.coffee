@@ -4,6 +4,7 @@ $ ->
   checkLocked()
   commandForm()
   submitButtonHack()
+  checkoutBeforeDeploy()
 
   $ '.confirm'
   .on 'click', ->
@@ -149,3 +150,7 @@ jsSetting = ->
     window.setting[$(this).attr('data-name')] = $(this).attr('data-value')
     return
   return
+
+checkoutBeforeDeploy = ->
+  $('.checkout-button').on 'click', ->
+    $('.deploy-button').prop('disabled', false)
