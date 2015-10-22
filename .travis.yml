@@ -1,0 +1,11 @@
+language: scala
+scala:
+- 2.11.6
+script: ./activator dist
+deploy:
+  provider: releases
+  api_key:
+    secure: HqzrciYL691qxmq8/1gv7j+Ogm9MHVC/tsfW+7rO0LvJn8NbWH6/0gXSkt4CtP0PimmQt+vh98x+tPALwPJCSoV38KEfdtTTD9yBdbaDK17YBEXsbwwr5TRPX7K/Kv5+nhtAtWxXhln+12S7sa7i0q4Va4Ssh2MN5I0A8vFJSL4=
+  file: target/universal/pploy-1.0-SNAPSHOT.zip
+  on:
+    repo: edvakf/pploy
