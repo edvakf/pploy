@@ -10,3 +10,5 @@ deploy:
   file: target/universal/pploy-1.0-SNAPSHOT.zip
   on:
     repo: edvakf/pploy
+    all_branches: true
+    tags: true
