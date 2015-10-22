@@ -2,7 +2,7 @@ scalariformSettings
 
 name := """pploy"""
 
-version := "0.5.5"
+version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
