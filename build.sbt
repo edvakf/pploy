@@ -26,3 +26,6 @@ libraryDependencies += "org.eclipse.jgit" % "org.eclipse.jgit" % "[3.4,)"
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
 excludeFilter in (Assets, LessKeys.less) := "_*.less"
+
+// http://grokbase.com/t/gg/play-framework/14bhbem1vw/2-2-change-folder-name-in-distribution-zip
+name in Universal := moduleName.value
