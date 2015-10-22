@@ -1,7 +1,7 @@
 language: scala
 scala:
 - 2.11.6
-script: ./activator dist
+script: sbt dist
 deploy:
   provider: releases
   api_key:
