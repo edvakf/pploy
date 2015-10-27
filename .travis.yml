@@ -1,5 +1,5 @@
 language: scala
-scala: 2.11.6
+scala: 2.11.4
 sudo: false
 jdk: openjdk6
 script: sbt dist
