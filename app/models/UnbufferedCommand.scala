@@ -19,7 +19,7 @@ object UnbufferedCommand {
 
   def apply(command: String): Seq[String] = {
     if (hasLinuxScriptCommand) {
-      Seq("script", "-c", command, "-q", "/dev/null") // linux script
+      Seq("bash", "-c", "stdbuf -oL -eL " + command + " 2>&1") // linux script
     } else {
       Seq("script", "-q", "/dev/null", command) // bsd script
     }
