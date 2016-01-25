@@ -26,6 +26,16 @@ DEPLOY_USER=foo DEPLOY_ENV=staging .deploy/bin/deploy
 
 So you can do pretty much anything there, eg. call a Capistrano command.
 
+### Changing the `DEPLOY_ENV`s
+
+By default, `staging` and `production` are the only deploy envs supported. If you want to change them, add a file named `.deploy/config/deploy_envs` in the repo with one line per env.
+
+```
+preview
+staging
+production
+```
+
 ## Config values
 
 ### Working directory
