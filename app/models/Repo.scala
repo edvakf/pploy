@@ -16,6 +16,11 @@ case class Repo(name: String) {
     if (file.isFile) { Some(file) } else { None }
   }
 
+  def deployEnvsFile: Option[File] = {
+    val file = new File(dir, ".deploy/config/deploy_envs")
+    if (file.isFile) { Some(file) } else { None }
+  }
+
   val deployCommand = ".deploy/bin/deploy"
 
   lazy val defaultCheckoutCommand = {

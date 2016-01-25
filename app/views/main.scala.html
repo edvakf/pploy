@@ -23,11 +23,10 @@
       </form>
       <form action="@routes.Application.deploy(currentProject.name)" method="post" class="command-form" target="command-log-frame">
         @CSRF.formField
-        <h4>@Messages("main.deploy.staging")</h4>
-        <button class="btn btn-success deploy-button" name="target" disabled value="staging">@Messages("main.deploy.staging")</button>
-
-        <h4>@Messages("main.deploy.production")</h4>
-        <button class="btn btn-success deploy-button" name="target" disabled value="production">@Messages("main.deploy.production")</button>
+        @currentProject.deployEnvs.map { env =>
+          <h4>@Messages("main.deploy", env)</h4>
+          <button class="btn btn-success deploy-button" name="target" disabled value="@env">@Messages("main.deploy", env)</button>
+        }
       </form>
     </div>
   }

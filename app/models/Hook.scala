@@ -21,8 +21,8 @@ object Hook {
     idobata.foreach { _.postHTML(Messages("hook.lock.extended", projectName, userName)) }
   }
 
-  def deployed(projectName: String, userName: String) = {
-    idobata.foreach { _.postHTML(Messages("hook.deployed", projectName, userName)) }
+  def deployed(projectName: String, userName: String, target: String) = {
+    idobata.foreach { _.postHTML(Messages("hook.deployed", projectName, userName, target)) }
   }
 
 }

@@ -80,7 +80,7 @@ case class Project(name: String) {
 
   def deployProcess(user: User, target: String) = {
     Logger.info(repo.deployCommand)
-    if (target == "production") Hook.deployed(name, user.name)
+    if (target == "production") Hook.deployed(name, user.name, target)
 
     Process(
       UnbufferedCommand(repo.deployCommand),
@@ -98,6 +98,23 @@ case class Project(name: String) {
       val source = Source.fromFile(file)(codec)
       try source.mkString
       finally source.close()
+    }
+  }
+
+  def deployEnvs: Seq[String] = {
+    repo.deployEnvsFile match {
+      case Some(file) =>
+        val codec = Codec.UTF8
+        codec.onMalformedInput(CodingErrorAction.IGNORE)
+
+        val source = Source.fromFile(file)(codec)
+        try {
+          source.mkString.split("\n").toSeq
+        } finally {
+          source.close()
+        }
+      case None =>
+        Seq("staging", "production")
     }
   }
 
