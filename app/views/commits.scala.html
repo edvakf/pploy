@@ -15,7 +15,7 @@
         @commits.map { commit =>
           <tr class="header">
             <td class="hash">
-              @commit.abbrev
+              @commit.hash.take(7)
             </td>
             <td nowrap>@commit.author</td>
             <td>
@@ -40,7 +40,7 @@
                 }
               }
             </td>
-            <td nowrap>@commit.datetime</td>
+            <td nowrap>@commit.dateTimeString</td>
           </tr>
           <tr class="subject">
             <td colspan="5">@commit.subject</td>

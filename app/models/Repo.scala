@@ -55,7 +55,7 @@ case class Repo(name: String) {
 
   def commits = {
     val commits = git.log.setMaxCount(Repo.commitLength).call()
-    commits.map { new Commit(git, _) }
+    commits.map { Commit(git, _) }
   }
 }
 
