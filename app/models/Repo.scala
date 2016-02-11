@@ -23,33 +23,20 @@ case class Repo(name: String) {
 
   val deployCommand = ".deploy/bin/deploy"
 
-  lazy val defaultCheckoutCommand = {
-    val f = new File("/tmp/checkout.sh")
-    if (!f.isFile) {
-      val out = new PrintWriter(new BufferedWriter(new FileWriter(f)))
-      out.print(
-        """#!/bin/bash -eux
-          |git fetch --prune --depth ##commitLength##
-          |git reset --hard $DEPLOY_COMMIT
-          |git clean -fdx
-          |git submodule sync
-          |git submodule init
-          |git submodule update --recursive
-        """.stripMargin.replace("##commitLength##", Repo.commitLength.toString)
-      )
-      out.close()
-      f.setExecutable(true)
-    }
-    f.getCanonicalPath
-  }
-
-  lazy val checkoutCommand = {
+  def checkoutCommand = {
     val checkoutScript = ".deploy/bin/checkout_overwrite"
     // if checkout_overwrite script exists
     if (new File(dir, checkoutScript).isFile) {
       checkoutScript
     } else {
-      defaultCheckoutCommand
+      "bash -x -c '" + Seq(
+        "git fetch --prune",
+        "git reset --hard $DEPLOY_COMMIT",
+        "git clean -fdx",
+        "git submodule sync",
+        "git submodule init",
+        "git submodule update --recursive"
+      ).mkString(" && ") + "'"
     }
   }
 
