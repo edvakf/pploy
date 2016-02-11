@@ -54,8 +54,8 @@ case class Repo(name: String) {
   }
 
   def commits = {
-    val commits = git.log.setMaxCount(Repo.commitLength).call()
-    commits.map { Commit(git, _) }
+    val logs = Process(Seq("git", "log", "-n", Repo.commitLength.toString) ++ Commit.gitLogOption, dir).!!
+    Commit.parse(logs)
   }
 }
 

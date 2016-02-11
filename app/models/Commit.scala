@@ -1,60 +1,44 @@
 package models
 
-import java.io.ByteArrayOutputStream
-
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.diff.{ DiffEntry, DiffFormatter }
-import org.eclipse.jgit.revwalk.RevCommit
 import org.joda.time.DateTime
 import org.joda.time.format.{ ISODateTimeFormat, DateTimeFormat }
-import scala.collection.JavaConversions._
 
 case class Commit(hash: String, dateTime: DateTime, author: String, otherRefs: Seq[String], subject: String, body: String, nameStatus: String) {
   def dateTimeString = dateTime.toString(DateTimeFormat.longDateTime())
 }
 
 object Commit {
-  def apply(git: Git, c: RevCommit): Commit = {
-    val nameStatus = {
-      // https://github.com/eclipse/jgit/blob/master/org.eclipse.jgit.pgm/src/org/eclipse/jgit/pgm/Log.java#L347-L354
-      // https://github.com/eclipse/jgit/blob/master/org.eclipse.jgit.pgm/src/org/eclipse/jgit/pgm/Diff.java#L226-L251
-      val a = if (c.getParentCount > 0) c.getParent(0).getTree else null
-      val b = c.getTree
+  private val delim1 = "1PPLOY1YOLPP1"
+  private val delim2 = "2PPLOY2YOLPP2"
 
-      if (a == null) {
-        "JGit's bug: diff of the initial commit cannot be retrieved"
-      } else {
-        val df = new DiffFormatter(new ByteArrayOutputStream())
-        df.setRepository(git.getRepository)
-        df.scan(a, b).map { ent =>
-          ent.getChangeType match {
-            case DiffEntry.ChangeType.ADD => "A\t" + ent.getNewPath
-            case DiffEntry.ChangeType.DELETE => "D\t" + ent.getOldPath
-            case DiffEntry.ChangeType.MODIFY => "M\t" + ent.getNewPath
-            case DiffEntry.ChangeType.COPY => f"C${ent.getScore}%03d\t${ent.getOldPath}\t${ent.getNewPath}"
-            case DiffEntry.ChangeType.RENAME => f"R${ent.getScore}%03d\t${ent.getOldPath}\t${ent.getNewPath}"
-          }
-        }
-          .mkString("\n")
+  val gitLogOption = Seq(
+    "--decorate=full", // prefix refs with refs/heads/, refs/remotes/origin/ and so on
+    "--name-status", // show list of file diffs
+    "-m", // show file diffs for merge commit
+    "--first-parent", // -m shows file diffs from each parent. --first-parent make it from the first parent
+    s"--pretty=format:${delim1}%H${delim2}%cI${delim2}%an${delim2}%D${delim2}%s${delim2}%b${delim2}"
+  )
+
+  def parse(logs: String): Seq[Commit] = {
+    logs.split(delim1).drop(1).map { log =>
+      log.split(delim2).toSeq match {
+        case Seq(hash, isoDate, author, refs, subject, body, nameStatus) =>
+          val otherRefs = refs.split(", ")
+            .flatMap(_.split(" -> ")) // master becomes "HEAD -> refs/head/master"
+            .filterNot(_ == "") // filter out the case when refs is an empty string
+
+          Commit(
+            hash,
+            ISODateTimeFormat.dateTimeNoMillis.parseDateTime(isoDate),
+            author,
+            otherRefs,
+            subject,
+            body.trim,
+            nameStatus.trim
+          )
+        case _ =>
+          throw new RuntimeException(s"failed to parse commit log: ${log}")
       }
     }
-
-    val otherRefs = {
-      // https://github.com/eclipse/jgit/blob/master/org.eclipse.jgit.pgm/src/org/eclipse/jgit/pgm/Log.java#L245-L254
-      git.getRepository.getAllRefsByPeeledObjectId.get(c) match {
-        case null => Seq()
-        case list => list.map { ref => ref.getName }.toSeq
-      }
-    }
-
-    Commit(
-      hash = c.getId.name,
-      dateTime = new DateTime(c.getCommitTime.asInstanceOf[Long] * 1000),
-      author = c.getAuthorIdent.getName,
-      otherRefs = otherRefs,
-      subject = c.getShortMessage,
-      body = c.getFullMessage.trim,
-      nameStatus = nameStatus
-    )
   }
 }
