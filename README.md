@@ -8,7 +8,7 @@ With pploy you can;
 * add a git repository for deploy list easily
 * let your project members lock a project between staging check and production deploy
 * configure LDAP info to fetch staffs' names
-* notify deployments to [idobata](https://idobata.io/)
+* notify deployments to [Slack](https://slack.com/) and [idobata](https://idobata.io/)
 
 ## Requirements to a repository to be deployed
 
@@ -78,6 +78,14 @@ pploy.lock.extendMinutes=10
 ```
 
 These are for how long a project is locked once someone gained and extended a lock.
+
+### Slack
+
+```
+pploy.slack.endpoint="https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/1234567890abcdefghijklmn"
+```
+
+If enabled, deploy logs are posted to Slack through an Incoming WebHook integration.
 
 ### Idobata
 
