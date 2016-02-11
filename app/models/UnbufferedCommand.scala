@@ -9,19 +9,15 @@ object UnbufferedCommand {
 
   // see: http://unix.stackexchange.com/questions/25372/turn-off-buffering-in-pipe
 
-  private lazy val hasLinuxScriptCommand = {
-    var isLinux = false
-    Process("script --version") ! ProcessLogger(
-      line => if (line.indexOf("linux") >= 0) isLinux = true
-    )
-    isLinux
+  private lazy val hasStdbufCommand = {
+    0 == Process("which stdbuf").!
   }
 
   def apply(command: String): Seq[String] = {
-    if (hasLinuxScriptCommand) {
-      Seq("bash", "-c", "stdbuf -oL -eL " + command + " 2>&1") // linux script
+    if (hasStdbufCommand) {
+      Seq("bash", "-c", "stdbuf -oL -eL " + command + " 2>&1") // Linux
     } else {
-      Seq("script", "-q", "/dev/null", command) // bsd script
+      Seq("script", "-q", "/dev/null", "bash", "-c", command) // Mac OS X
     }
   }
 }
