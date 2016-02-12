@@ -31,7 +31,7 @@ object Hook {
 
   def deployed(projectName: String, userName: String, target: String) = {
     idobata.foreach { _.post(Messages("hook.deployed", projectName, userName, target)) }
-    slack.foreach { _.post(Messages("hook.deployed", projectName, userName)) }
+    slack.foreach { _.post(Messages("hook.deployed", projectName, userName, target)) }
   }
 
 }
