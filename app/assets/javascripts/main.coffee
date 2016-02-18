@@ -28,11 +28,12 @@ iframeStopFollowingScroll = (frame) ->
 countDown = ->
   elem = $ '.time-left'
   return if not elem.length
-  seconds = + elem.attr 'data-seconds'
+  maxSeconds = + elem.attr 'data-seconds'
+  startTime = Date.now()
   setInterval ->
-    seconds--
-    location.reload() if seconds <= 0
-    elem.html secondsToString(seconds)
+    leftSeconds = maxSeconds - (Date.now() - startTime) / 1000
+    location.reload() if leftSeconds <= 0
+    elem.html secondsToString(leftSeconds)
     return
   , 1000
   return
