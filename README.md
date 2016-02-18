@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/edvakf/pploy.svg?branch=master)](https://travis-ci.org/edvakf/pploy)
+
 # pploy
 
 The deploy lock manager for [pixiv](http://www.pixiv.net/).
