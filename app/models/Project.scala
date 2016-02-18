@@ -80,7 +80,7 @@ case class Project(name: String) {
 
   def deployProcess(user: User, target: String) = {
     Logger.info(repo.deployCommand)
-    if (target == "production") Hook.deployed(name, user.name, target)
+    Hook.deployed(name, user.name, target)
 
     Process(
       UnbufferedCommand(repo.deployCommand),
