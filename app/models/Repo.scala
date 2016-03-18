@@ -31,6 +31,7 @@ case class Repo(name: String) {
     } else {
       "bash -x -c '" + Seq(
         "git fetch --prune",
+        "git checkout -f $DEPLOY_COMMIT",
         "git reset --hard $DEPLOY_COMMIT",
         "git clean -fdx",
         "git submodule sync",
