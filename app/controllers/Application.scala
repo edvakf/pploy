@@ -131,8 +131,8 @@ object Application extends Controller {
     val file = new File(WorkingDir.logFile(proj.name).toString)
     if (file.isFile) {
       if (full != 1) {
-        // fullでなければ先頭1000行までしか返さない
-        val limit = 1000
+        val limit = current.configuration.getInt("pploy.commitlogs.lines").getOrElse(1000)
+
         val lines = Source.fromFile(file.getCanonicalPath).getLines().take(limit).toList
         if (lines.length >= limit) {
           Ok(lines.mkString("\n") + "\n*** LOG FILE TOO LONG. PLEASE SEE THE FULL LOG. ***")
