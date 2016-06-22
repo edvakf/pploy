@@ -13,7 +13,7 @@ GET     /:project/checkout          controllers.Application.checkoutWS(project, 
 GET     /:project/commits           controllers.Application.commits(project)
 POST    /:project/deploy            controllers.Application.deploy(project)
 GET     /:project/deploy            controllers.Application.deployWS(project, target)
-GET     /:project/logs              controllers.Application.logs(project)
+GET     /:project/logs              controllers.Application.logs(project, full: Long ?= 0)
 POST    /:project/remove            controllers.Application.remove(project)
 
 # Map static resources from the /public folder to the /assets URL path

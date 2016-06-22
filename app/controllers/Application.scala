@@ -8,6 +8,9 @@ import play.api.libs.iteratee.Iteratee
 import play.api.mvc._
 import models._
 
+import scala.io.Source
+import scala.sys.process.Process
+
 object Application extends Controller {
   def getCurrentUser(request: RequestHeader) = {
     request.cookies.get("user").map {
@@ -123,12 +126,25 @@ object Application extends Controller {
     Ok(views.html.commits(proj.repo.commits))
   }
 
-  def logs(project: String) = Action { implicit request =>
+  def logs(project: String, full: Long) = Action { implicit request =>
     val proj = Project(project)
     val file = new File(WorkingDir.logFile(proj.name).toString)
     if (file.isFile) {
-      Ok.sendFile(content = file, inline = true)
-        .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
+      if (full != 1) {
+        // fullでなければ先頭1000行までしか返さない
+        val limit = 1000
+        val lines = Source.fromFile(file.getCanonicalPath).getLines().take(limit).toList
+        if (lines.length >= limit) {
+          Ok(lines.mkString("\n") + "\n*** LOG FILE TOO LONG. PLEASE SEE THE FULL LOG. ***")
+            .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
+        } else {
+          Ok(lines.mkString("\n"))
+            .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
+        }
+      } else {
+        Ok.sendFile(content = file, inline = true)
+          .withHeaders("Content-Type" -> "text/plain; charset=utf-8", "X-Content-Type-Options" -> "nosniff")
+      }
     } else {
       NotFound
     }
