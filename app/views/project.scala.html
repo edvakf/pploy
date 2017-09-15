@@ -1,7 +1,7 @@
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUserOption: Option[User], useWebSocket: Boolean)(implicit request: Request[AnyContent], lang: Lang, flash: Flash)
+@(currentProject: Project, currentUserOption: Option[User], useWebSocket: Boolean)(implicit request: Request[AnyContent], messages: Messages, flash: Flash)
 
 @layout{
   @main(currentProject, currentUserOption, useWebSocket)

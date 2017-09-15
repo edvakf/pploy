@@ -1,26 +1,18 @@
-import org.specs2.mutable._
-import org.specs2.runner._
-import org.junit.runner._
-
-import play.api.test._
+import org.scalatestplus.play.PlaySpec
 import play.api.test.Helpers._
+import play.api.test._
 
-/**
- * Add your spec here.
- * You can mock out a whole application including requests, plugins etc.
- * For more information, consult the wiki.
- */
-@RunWith(classOf[JUnitRunner])
-class ApplicationSpec extends Specification {
+class ApplicationSpec extends PlaySpec {
 
-  "Application" should {
-
-    "render the index page" in new WithApplication{
-      val home = route(FakeRequest(GET, "/")).get
-
-      status(home) must equalTo(OK)
-      contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Welcome to pploy")
+  "Application" must {
+    "should render the index page" in {
+      running(FakeApplication()) {
+        val home = route(FakeRequest(GET, "/")).get
+        status(home) must be(OK)
+        contentType(home) must be(Some("text/html"))
+        contentAsString(home) must include("Welcome to pploy")
+      }
     }
   }
+
 }

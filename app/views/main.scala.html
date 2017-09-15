@@ -2,7 +2,7 @@
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUserOption: Option[User], useWebSocket: Boolean)(implicit request: Request[AnyContent], lang: Lang)
+@(currentProject: Project, currentUserOption: Option[User], useWebSocket: Boolean)(implicit request: Request[AnyContent], messages: Messages)
 
 @if(useWebSocket) {
   <input type="hidden" class="js-setting" data-name="use_web_socket" data-value="true">
