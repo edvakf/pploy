@@ -2,7 +2,7 @@
 @import models.Project
 @import models.User
 
-@(currentProject: Project, currentUserOption: Option[User])(implicit request: Request[AnyContent], lang: Lang)
+@(currentProject: Project, currentUserOption: Option[User])(implicit request: Request[AnyContent], messages: Messages)
 
 <form class="sidebar-section box" action="@routes.Application.lock(currentProject.name)" method="POST"
   id="lock-form" @if(currentProject.isLocked) { data-lock-user="@currentProject.lock.user.name" }>

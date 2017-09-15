@@ -139,5 +139,4 @@ class LockStatusException(message: String = null, cause: Throwable = null)
     if (project.isLocked) "lock.operation.taken" else "lock.operation.expired"
   )
 
-  def getMessage(implicit lang: Lang) = Messages(super.getMessage)(lang)
 }

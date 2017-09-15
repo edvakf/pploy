@@ -1,15 +1,16 @@
 package controllers
 
 import java.io.File
+
+import models._
 import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.Messages.Implicits._
 import play.api.libs.iteratee.Iteratee
 import play.api.mvc._
-import models._
 
 import scala.io.Source
-import scala.sys.process.Process
 
 object Application extends Controller {
   def getCurrentUser(request: RequestHeader) = {
