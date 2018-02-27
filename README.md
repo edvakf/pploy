@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/edvakf/pploy.svg?branch=master)](https://travis-ci.org/edvakf/pploy)
+**THIS PROJECT IS NO LONGER MAINTAINED IN FAVOR OF https://github.com/edvakf/go-pploy**
 
 # pploy
 
